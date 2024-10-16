@@ -1,0 +1,46 @@
+/* AllergiesTable.css */
+
+/* Asegura que los estilos se apliquen correctamente usando !important */
+.bg-danger {
+    background-color: #f8c3c8 !important;
+    border-radius: 10px; /* Red color */
+    text-align: center;
+}
+
+.bg-warning {
+    background-color: #fcefca !important;
+    border-radius: 10px; /* Yellow color */
+    text-align: center;
+}
+
+.bg-info {
+    background-color: #97e1ec !important;
+    border-radius: 10px; /* Blue color */
+    text-align: center;
+}
+.tables-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    margin: 2rem;
+    justify-content: space-between;
+    width: 90%;
+    align-items: flex-start;
+    padding: 2rem;
+}
+.table td{
+    border: 1px solid lightgray;
+    font-weight: lighter;
+}
+.table{
+    width: auto;
+}
+.table th{
+    font-weight: 400;
+}
+
+@media (min-width: 600px) {
+    .tables-container{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

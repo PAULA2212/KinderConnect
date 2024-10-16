@@ -1,0 +1,42 @@
+.calendar-event-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #035d6c; /* Color azul para el punto */
+    border-radius: 50%; /* Hace el punto redondo */
+    margin: 2px auto; /* Centra el punto dentro de la celda */
+    position: relative;
+    z-index: 1;
+  }
+  
+  .calendar-events {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .selected-day{
+    background-color: #3dc0c0;
+  }
+  .react-calendar__tile--active {
+    background-color: #3dc0c0 !important; /* Cambia el color a tu preferido */
+    color: white; /* Color del texto */
+    border-radius: 10%; /* Hacer que el fondo sea circular */
+  }
+  .react-calendar__tile:hover {
+    background-color: #b9f0ea !important; /* Cambia a un color de fondo deseado */
+    border-radius: 10%; /* Hace que el fondo sea circular */
+    color: #00796b; /* Cambia el color del texto si es necesario */
+  }
+  .react-calendar__tile--now {
+    background-color: #f0b9eb !important; /* Color de fondo amarillo para el día actual */
+    color: black; /* Color del texto */
+    border-radius: 10%; /* Redondear el fondo */
+  }
+  .react-calendar {
+    border-radius: 10px; /* Ajusta este valor para mayor o menor redondez */
+    border: 2px solid #00796b; /* Cambia el color del borde */
+    padding: 10px; /* Añade un poco de espacio interno para evitar que el contenido esté muy pegado al borde */
+  }
+  .cal{
+    display: flex;
+    justify-content: center;
+  }

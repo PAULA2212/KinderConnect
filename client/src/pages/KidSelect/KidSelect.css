@@ -1,0 +1,23 @@
+.select-form{
+    display: grid;
+    grid-template-columns: 1 fr;
+    margin-top: 1rem;
+       gap: 1rem; /* Espacio superior */
+       box-shadow: 2px 2px 8px rgba(94, 94, 94, 0.7); /* Sombra suave */
+       border: 1px solid #035d6c;
+       padding: 1rem;
+       padding-bottom: 3rem;
+       border-radius: 5px;
+       width: 100%;
+       position: relative;
+       align-content: space-between;
+}
+.selected-kid-message{
+    margin: 1rem;
+    font-size: 20px;
+}
+@media (min-width: 900px) {
+    .select-form{
+        grid-template-columns: 1fr 1fr;
+    }
+}

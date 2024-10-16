@@ -1,0 +1,32 @@
+.chat-box {
+    padding: 10px;
+    background-color: #f7f7f7;
+}
+
+.message-bubble {
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.bg-user {
+    background-color: #dbdbdb; /* Fondo de mensajes del usuario */
+    color: #000; /* Color de texto del usuario */
+}
+
+.bg-assistant {
+    background-color: #ebebeb; /* Fondo de mensajes del asistente */
+    color: #000; /* Color de texto del asistente */
+}
+.form-control {
+    border: 1px solid #3dc0c0;
+    border-radius: 5px;
+    background-color: white;
+}
+.form-control:hover {
+ border: 3px solid #3dc0c0;
+ box-shadow: none;
+}
+.form-control::before{
+ border: 3px solid #3dc0c0;
+ box-shadow: none;
+}

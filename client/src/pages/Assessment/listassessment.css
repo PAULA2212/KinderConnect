@@ -1,0 +1,9 @@
+
+  .vertical-timeline::before {
+    background: #6c757d; /* Cambia el color según tus necesidades */
+     width: 2px; /* Ajusta el grosor de la línea */
+  }  
+  vertical-timeline-element-title{
+    color:#035d6c !important
+  }
+  

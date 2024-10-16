@@ -1,0 +1,23 @@
+.feeding-col {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px; /* Añadir margen inferior para que no se solapen verticalmente */
+}
+
+.feeding-item {
+    min-width: 100px;
+    max-width: 100%; /* Permitir que ocupe el ancho completo del contenedor */
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.feeding-item:hover {
+    transform: scale(1.05);
+}
+
+input.form-input {
+    width: 100%;
+}

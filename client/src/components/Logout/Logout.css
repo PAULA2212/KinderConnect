@@ -1,0 +1,18 @@
+.custom-button{
+    background-color: #3dc0c0 !important; /* Color de fondo del botón */
+    border: none !important; /* Sin borde */
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+    width: 100%;
+    margin-bottom: 0%;
+    
+}
+.custom-button:hover {
+    background-color: #035d6c !important;
+}
+.custom-button:focus,
+.custom-button:active{
+    background-color: transparent !important; /* Color de fondo del botón al hacer clic o enfocar */
+    color: inherit !important; /* Mantener el color del texto */
+    outline: none !important; /* Quitar el borde de enfoque */
+    box-shadow: none !important; /* Quitar la sombra del borde */
+}

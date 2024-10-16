@@ -1,0 +1,55 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 100px 10fr 1fr;
+    grid-template-areas: 
+        "header header"
+        "sidebar main"
+        "footer footer";
+    height: 100vh;
+    width: 100%; /* Para que la grid ocupe toda la altura de la ventana */
+}
+
+.gridheader {
+    grid-area: header;
+    background-color: lightblue; /* Opcional: solo para visualización */
+    position: sticky;
+    top: 0;  /* Asegúrate de que el header esté en la parte superior */
+    z-index: 2; /* Asegúrate de que el header esté sobre otros elementos si es necesario */
+    width: 100%; /* Asegúrate de que el header ocupe todo el ancho disponible */
+}
+
+.gridsidebar {
+    grid-area: sidebar;
+    background-color: white; /* Opcional: solo para visualización */
+    padding-top: 30px; /* Asegúrate de que el contenido no se esconda bajo el header */
+}
+
+.gridmain {
+    grid-area: main;
+    background-color: white; /* Opcional: solo para visualización */
+    padding-top: 30px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Asegúrate de que el contenido no se esconda bajo el header */
+}
+
+.gridfooter {
+    grid-area: footer;
+    background-color: lightcoral; /* Opcional: solo para visualización */
+}
+
+@media screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Cambia a una sola columna */
+        grid-template-areas: 
+            "header"
+            "main"
+            "footer";
+    }
+
+    .gridsidebar {
+        display: none; /* Oculta el sidebar en pantallas pequeñas */
+    }
+}

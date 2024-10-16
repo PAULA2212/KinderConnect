@@ -1,0 +1,191 @@
+/* CustomHeader.css */
+
+.navbar {
+    background-color: #3dc0c0;
+    width: 100%;
+}
+
+.navbar-container {
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+    color: #035d6c;
+}
+
+.navbar-icon-title {
+    display: flex;
+    align-items: center; /* Alinea verticalmente la imagen y el título */
+}
+
+.navbar-logo {
+    display: flex;
+    text-decoration: none;
+    color: #035d6c;
+}
+
+.navbar-logo img {
+    width: 5rem;
+    margin: 1rem;
+    border-radius: 50%;
+}
+
+.navbar-title {
+    color: #fff;
+    text-decoration: none;
+    font-size: 3rem;
+    margin-top: 1rem;
+    font-family: 'Kinderfont';
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.navbar-menu.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.navbar-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; /* Alinea verticalmente todos los elementos en la fila */
+}
+
+.navbar-items.active {
+    flex-direction: column; 
+    display: flex;
+    align-items: center; /* Alinea verticalmente el ícono y el texto */
+    justify-content: center;
+}
+
+.navbar-item {
+    margin-right: 20px; 
+}
+
+.navbar-item .user, .navbar-item .user-dropdown {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el ícono y el texto */
+    justify-content: center;
+}
+
+.navbar-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.navbar-link:hover {
+    background-color: #fff;
+    color: #035d6c;
+    border: 1px solid #035d6c;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.navbar-toggle {
+    display: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.logout {
+    background-color: #3dc0c0;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: 10px; 
+    transition: all 0.3s ease;
+    margin: 0;
+    border: none;
+}
+
+.logout:hover {
+    background-color: #fff;
+    color: #035d6c;
+    border: 1px solid #035d6c;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.nombre {
+    color: white; /* Color del nombre en el encabezado */
+    display:inline;
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+}
+
+.nombre-dropdown {
+    color: #035d6c; /* Color del nombre en el menú desplegable */
+    display:inline;
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+}
+
+.user-icon {
+    color: white; /* Color del ícono en el encabezado */
+    font-size: 1.5rem; /* Asegura un tamaño visible para el ícono */
+}
+
+.user-icon-dropdown {
+    color: #035d6c; /* Color del ícono en el menú desplegable */
+    font-size: 1.5rem; /* Asegura un tamaño visible para el ícono */
+}
+
+/* Evitar que los pseudo-elementos interfieran con el ícono */
+.user-icon::before,
+.user-icon-dropdown::before {
+    content: ''; /* Evita el contenido adicional del ::before si no es necesario */
+}
+
+.navbar-items.active p {
+    color: #035d6c;
+}
+
+.user {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el texto y el ícono */
+}
+
+@media screen and (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    .navbar-items {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar-item {
+        width: 100%;
+        text-align: center;
+        margin: 10px 0;
+    }
+}

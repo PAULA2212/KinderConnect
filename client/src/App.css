@@ -1,0 +1,229 @@
+/* Profile.css */
+
+/* Estiliza la tarjeta de perfil */
+.kinder-card {
+    /* Ajusta el contenedor al tamaño del contenido */
+       margin-top: 1rem; /* Espacio superior */
+       color: #035d6c; /* Color del texto principal */
+       background-color: #fff; /* Fondo blanco */
+       overflow: hidden; /* Oculta cualquier contenido que sobresalga de los bordes redondeados */
+       box-shadow: 2px 2px 8px rgba(94, 94, 94, 0.7); /* Sombra suave */
+       border: 1px solid #035d6c; /* Borde con color rosa claro */
+       border-radius: 5px; /* Bordes redondeados */
+       width: 100%; /* Ajusta el ancho según el contenido por defecto */
+   }
+   
+   /* Estiliza el contenido interno con borde degradado */
+   .card-body {
+       padding: 1rem; /* Espacio interno */
+       overflow: hidden; /* Asegura que el contenido no sobresalga de los bordes redondeados */
+   }
+   
+   /* Color para el texto en negrita */
+   strong {
+       color: #035d6c; /* Color del texto en negrita */
+   }
+   
+   /* Estiliza el título del perfil */
+   .kinder-title {
+       display: flex; /* Flexbox para alineación */
+       justify-content: space-between; /* Espacio entre el título y el icono */
+       align-items: center;  /* Alineación vertical centrada */
+       font-family: 'kinderfont'; /* Fuente personalizada */
+       font-size: x-large; /* Tamaño de fuente grande */
+       font-weight: bold;
+       gap: 1rem; /* Texto en negrita */
+       margin: 1rem;
+   }
+   
+   /* Estiliza el icono de edición */
+   .edit-icon {
+       cursor: pointer; /* Cambia el cursor al pasar sobre el icono */
+       color: #f0b9eb !important; /* Color del icono */
+       font-size: 2rem; /* Tamaño del icono */
+       border-radius: 50%; /* Redondear el icono */
+       padding: 1rem;
+       background-color: #fff;
+       border: 3px solid transparent;
+    
+    /* Espacio alrededor del icono */
+   }
+   .edit-icon:hover{
+       border: 3px solid #f0b9eb;
+   }
+   
+   
+   
+   /* Estiliza el formulario del perfil */
+   .kinder-modal{
+       margin-top: 1rem;
+       display: grid;
+       grid-template-columns: 1fr;
+       gap: 1rem; /* Espacio superior */
+   }
+   .form-input{
+       padding: 10px;
+       border: 1px solid #3dc0c0 !important;
+       border-radius: 5px;
+       background-color: white;
+   }
+   .form-input:focus, .form-input:active, .form-input::selection{
+       border: 3px solid #3dc0c0;
+       box-shadow: none;
+   }
+   
+   /* Estiliza el botón de envío */
+   .submit-button{
+       position: absolute; /* Posiciona el botón de manera absoluta dentro del contenedor */
+       bottom: 1rem; /* Espacio desde el borde inferior del contenedor */
+       right: 1rem; /* Espacio desde el borde derecho del contenedor */
+       width: auto; /* Ancho automático para ajustarse al contenido */
+       padding: 0.5rem 1rem; /* Padding para tamaño del botón */
+       background-color: #3dc0c0; /* Color de fondo del botón */
+       color: white; /* Color del texto */
+       border: none; /* Sin borde */
+       border-radius: 5px; /* Bordes redondeados */
+       cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+       transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
+       --bs-btn-active-bg: #3dc0c0; /* Cambia a tu color deseado */
+       --bs-btn-active-border-color: #2da6a6;
+       --bs-btn-disabled-border-color: #3dc0c0; /* Reemplaza con tu color preferido */
+       --bs-btn-disabled-opacity: 0.6;
+   }
+   .submit-button:hover, .kinder-button:hover{
+   background-color: #035d6c;
+   }
+   
+   .kinder-button{
+   padding: 0.5rem 1rem; /* Padding para tamaño del botón */
+   background-color: #3dc0c0; /* Color de fondo del botón */
+   color: white; /* Color del texto */
+   border: none; /* Sin borde */
+   border-radius: 5px; /* Bordes redondeados */
+   cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+   transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
+   --bs-btn-active-bg: #3dc0c0; /* Cambia a tu color deseado */
+   --bs-btn-active-border-color: #2da6a6;
+   width: 200px;
+   }
+   
+   .c{
+   background-color: #035d6c;
+   transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
+   --bs-btn-active-bg:#035d6c; /* Cambia a tu color deseado */
+   --bs-btn-active-border-color: #035d6c;
+   }
+   
+   .c:hover{
+   background-color: #3dc0c0;
+   }
+   .buttons-container{
+       display: flex;
+       flex-direction: row;
+       justify-content: center;
+       align-content: center;
+       height: fit-content;
+       margin-top: 3rem;
+       gap: 2rem;
+   }
+.button-p{
+    display: flex;
+    flex-direction: column;
+}
+
+.kinder-modal .modal-content {
+    border: 2px solid #035d6c; /* Cambia el color del borde */
+    border-radius: 8px; /* Cambia el radio del borde si lo deseas */
+}
+
+.kinder-modal .modal-header {
+    background-color: #fff;  /* Cambia el color de fondo del encabezado */  /* Cambia el color del texto del encabezado */
+}
+
+.kinder-modal .modal-title {
+    color: #035d6c; /* Cambia el color del texto del título */
+    font-family: 'kinderfont';
+    font-weight: bold;
+}
+
+.kinder-modal .modal-body {
+    color: #035d6c; /* Cambia el color del texto del cuerpo */
+}
+
+.kinder-modal .form-control {
+       border: 1px solid #3dc0c0;
+       border-radius: 5px;
+       background-color: white;
+}
+.kinder-modal .form-control:hover {
+    border: 3px solid #3dc0c0;
+    box-shadow: none;
+}
+.kinder-modal .form-control::before{
+    border: 3px solid #3dc0c0;
+    box-shadow: none;
+}
+.kinder-modal .btn-primary {
+   padding: 0.5rem 1rem; /* Padding para tamaño del botón */
+   background-color: #3dc0c0; /* Color de fondo del botón */
+   color: white; /* Color del texto */
+   border: none; /* Sin borde */
+   border-radius: 5px; /* Bordes redondeados */
+   cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+   transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
+   --bs-btn-active-bg: #3dc0c0; /* Cambia a tu color deseado */
+   --bs-btn-active-border-color: #2da6a6;
+   margin: 1rem;
+}
+
+.kinder-modal .btn-primary:hover {
+    background-color: #035d6c;
+}
+.kinder-modal form {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estilos responsivos para pantallas más grandes */
+@media (min-width: 900px) {
+    .kinder-modal form {
+        grid-template-columns: 1fr 1fr; /* Cambia a dos columnas */
+    }
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #3dc0c0; /* Color del borde inferior del contenedor de pestañas */
+  }
+  
+  .nav-tabs .nav-link {
+    border: 1px solid transparent; 
+    border-bottom: none; /* Elimina el borde inferior */
+    color: #495057;
+  }
+  
+  .nav-tabs .nav-link:hover {
+    border-color: #f0b9eb; /* Cambia el color del borde al pasar el ratón */
+  }
+  
+  .nav-tabs .nav-link.active {
+    border-color: #3dc0c0; /* Borde rojo en la pestaña activa */
+    color: #035d6c; /* Texto rojo en la pestaña activa */
+    background-color: #fff;
+    font-weight: bold;
+  }
+
+  .kinder-table .table {
+    margin: 1rem;
+    border: 1px solid #3dc0c0;
+    border-radius: 10px;
+ /* Bordes redondeados */
+  overflow: hidden; /* Cambia el color del borde de la tabla */
+  }
+  
+  .kinder-table .table th,
+  .kinder-table .table td {
+    border: 1px solid #3dc0c0; /* Cambia el color del borde de las celdas */
+  } 

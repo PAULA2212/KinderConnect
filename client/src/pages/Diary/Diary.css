@@ -1,0 +1,47 @@
+.form-ParenstDiary {
+    display: flex;
+    flex-direction: column; /* Cambiado de row a column para que los inputs ocupen el ancho completo */
+    gap: 1rem;
+    justify-content: center;
+    align-items: stretch; /* Cambiado de flex-start a stretch para que los inputs se estiren */
+    margin: 1rem;
+    padding: 1rem;
+    width: 100%;
+}
+
+.form-input {
+    width: 100%; /* Asegura que los inputs ocupen todo el ancho disponible */
+    margin-top: 0; /* Asegura que no haya margen adicional arriba */
+}
+.form-TeachersDiary {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-TeachersDiary section {
+    display: flex;
+    flex-direction: row; /* Cambiado a columna para que los inputs se alineen verticalmente en una fila */
+    gap: 1rem; /* Espaciado entre los grupos de inputs en la misma sección */
+    width: 100%; /* Asegura que la sección ocupe todo el ancho disponible */
+    justify-content: space-around
+}
+.form-group{
+    flex-grow: 1;
+}
+.diarycard{
+    color: #035d6c;
+    border-color: #035d6c;
+    margin: 1rem;
+}
+.edit-icon{
+    display: flex;
+    align-self: flex-end;
+}
+.kinder-modal form {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.5rem;
+}

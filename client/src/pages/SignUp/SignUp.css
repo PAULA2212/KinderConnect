@@ -1,0 +1,93 @@
+.boox {
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signupbox {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border: 10px solid transparent; 
+    border-image: linear-gradient(180deg, #f0b9eb, #f0e5b9,#b9f0eb) 1;
+    border-radius: 10px;
+    overflow: hidden;
+    gap: 15px
+}
+
+.signupbox h2 {
+    color: #035d6c;
+    font-family: Kinderfont;
+    font-size: 2rem;
+}
+
+.signupbox form {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* justify-content: center; */
+    align-items: center;
+}
+.signupbox form div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alinea los elementos al centro */
+}
+
+.signupbox form input {
+    padding: 5px;
+    border: 1px solid #3dc0c0;
+    border-radius: 5px;
+    background-color: white;
+}
+
+
+.signupbox button {
+    padding: 10px;
+    background-color: #3dc0c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signupbox button:hover {
+    background-color: white;
+    border: 3px solid #3dc0c0;
+    color: #3dc0c0;
+}
+.custom-select{
+    width: 55%; 
+    padding: 10px;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #3dc0c0;
+    border-radius: 4px;
+    appearance: none; /* Remueve el estilo nativo del navegador */
+    -webkit-appearance: none; /* Remueve el estilo nativo del navegador en Safari/Chrome */
+    -moz-appearance: none; /* Remueve el estilo nativo del navegador en Firefox */
+  }
+  
+  /* Estiliza el fondo del menú desplegable */
+  .custom-select option {
+    background-color: #d8efec;
+    color: #035d6c;
+  }
+  label{
+    margin: auto;
+    margin-top: 1rem;
+  }
+  .error-message{
+    color:red;
+  }
+@media (max-width: 600px) {
+    .signupbox form {
+        grid-template-columns: 1fr; /* Cambia a una sola columna */
+    }
+
+    .signupbox form input,
+    .signupbox form button {
+        width: auto; /* Vuelve a ancho automático para ocupar menos espacio en pantallas pequeñas */
+    }
+}
