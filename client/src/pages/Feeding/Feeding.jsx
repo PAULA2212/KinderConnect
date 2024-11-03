@@ -1,69 +1,60 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUtensils, faSearch } from "@fortawesome/free-solid-svg-icons"
-import { KidContext } from "../../Context/KidContext"
-import { UserContext } from "../../Context/UserContext"
-import { useContext, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { getFoods } from "../../services/Feeding/getFoodService"
-import FeedingModal from "./FeedingModal"
-import FeedingList from "./FeedingList"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUtensils, faSearch } from "@fortawesome/free-solid-svg-icons";
+import FeedingModal from "./FeedingModal";
+import FeedingList from "./FeedingList";
+import { useFeeding } from "./useFeeding";
 
-export default function Feeding (){
-    const {kid} = useContext(KidContext);
-    const {profileType} = useContext(UserContext);
-    const [foods, setFoods] = useState([])
-    const [filteredFoods, setFilteredFoods] = useState([])
-    const [searchTerm, setSearchTerm] = useState('')
+/**
+ * Componente `Feeding` para mostrar la sección de alimentación de un niño específico.
+ * Permite a los usuarios, dependiendo de su perfil, agregar alimentos a la lista y buscar alimentos
+ * en tiempo real mediante un campo de búsqueda.
+ *
+ * @returns {JSX.Element} - Interfaz de usuario para la alimentación de un niño.
+ */
+export default function Feeding () {
+    // Accede a datos y funciones del hook `useFeeding` para la gestión de alimentos
+    const {
+        kid,
+        profileType,
+        handleAddFood,
+        filteredFoods,
+        setSearchTerm,
+        searchTerm
+    } = useFeeding();
 
-    const fetchFoods = async()=>{
-        if (kid && kid.id_niño){
-            try{
-                const  response = await getFoods(kid.id_niño)
-                setFoods(response)
-            } catch (error){
-                console.log('Error al obtener los alimentos:', error)
-            }
-        }
-    }
-     const handleAddFood = async () => {
-        await fetchFoods();
-     }
-    
-    useEffect(()=>{
-        fetchFoods()
-    },[kid])
-    useEffect(() => {
-        const filtered = foods.filter(food => 
-            food?.alimento?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredFoods(filtered);
-    }, [searchTerm, foods]);
+    // Muestra un mensaje de selección si no hay un niño seleccionado en el contexto
     if (kid === null) {
         return (
             <>
                 <h1 className="kinder-title"><FontAwesomeIcon icon={faUtensils} />  Alimentación</h1>
                 <div>
                     <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
-                    <Link to="/layout/elegirniño">Seleccionar niño</Link>
                 </div>
             </>
         );
     }
-    return(
+
+    // Renderiza la interfaz principal cuando se ha seleccionado un niño
+    return (
         <>
-        <h1 className="kinder-title"><FontAwesomeIcon icon={faUtensils} />  Alimentación de {kid.nombre}</h1>
-        {profileType === 'progenitor' && (
-            <FeedingModal kid={kid}  onAddFood={handleAddFood} />
-        )}
-        <div style={{ position: 'relative', marginBottom: '20px', marginTop: '20px'}}>
+            {/* Título de la sección, que incluye el nombre del niño y un ícono */}
+            <h1 className="kinder-title"><FontAwesomeIcon icon={faUtensils} />  Alimentación de {kid.nombre}</h1>
+
+            {/* Condicional para mostrar el modal de agregar alimentos si el usuario es "progenitor" */}
+            {profileType === 'progenitor' && (
+                <FeedingModal kid={kid} onAddFood={handleAddFood} />
+            )}
+
+            {/* Campo de búsqueda de alimentos, con ícono y estilos personalizados */}
+            <div style={{ position: 'relative', marginBottom: '20px', marginTop: '20px'}}>
                 <input
                     type="text"
                     placeholder="Buscar alimentos..."
                     value={searchTerm}
-                    onChange={(e)=> {setSearchTerm(e.target.value)}}
+                    onChange={(e) => { setSearchTerm(e.target.value); }}
                     className="form-input"
                     style={{
-                        padding: '8px 40px 8px 30px', // Ajusta el padding para espacio del ícono
+                        padding: '8px 40px 8px 30px', // Espacio para el ícono de búsqueda
                         width: '100%',
                     }}
                 />
@@ -78,10 +69,9 @@ export default function Feeding (){
                     }} 
                 />
             </div>
-        {console.log('Foods antes de pasar al componente:', foods)}
-        <FeedingList foods={filteredFoods}/>
-        
+
+            {/* Componente `FeedingList` que muestra la lista de alimentos filtrados */}
+            <FeedingList foods={filteredFoods} />
         </>
-        
-    )
+    );
 }

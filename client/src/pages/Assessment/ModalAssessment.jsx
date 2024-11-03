@@ -1,81 +1,62 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Modal, Form, Button } from 'react-bootstrap';
-import { useState } from 'react';
-import axiosInstance from '../../utils/axiosInstance';
-import { toast, ToastContainer } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Importa el componente de icono de FontAwesome
+import { faPlus } from '@fortawesome/free-solid-svg-icons'; // Importa el icono de suma
+import { Modal, Form, Button } from 'react-bootstrap'; // Importa componentes de react-bootstrap para crear un modal
+import { useAssessmentModal } from './useModalAssessment'; // Importa el custom hook que maneja la lógica del modal
 
+// Componente ModalAssessment que recibe el niño, el usuario y una función de actualización de evaluaciones
 export default function ModalAssessment({ kid, user, onAssessmentUpdate }) {
-    const [showModal, setShowModal] = useState(false);
-    const [content, setContent] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-
-        const data = {
-            idTeacher: user.id_educador,
-            idKid: kid.id_niño,
-            date: new Date(),
-            content: content
-        };
-
-        try {
-            await axiosInstance.post('/addAssessment', data);
-            toast.success('La evaluación se guardó correctamente', { autoClose: 3000 });
-            setContent('');
-            setShowModal(false);
-            if (onAssessmentUpdate) onAssessmentUpdate();  // Llama a la función para actualizar la lista
-        } catch (error) {
-            console.log('Error al guardar la evaluación:', error);
-            toast.error('Ha habido un error al guardar la evaluación.', { autoClose: 3000 });
-        } finally {
-            setLoading(false);
-        }
-    };
+    // Utiliza el custom hook para manejar la lógica del modal y los datos de la evaluación
+    const {
+        showModal,
+        handleShow,
+        handleClose,
+        content,
+        setContent,
+        loading,
+        handleSubmit
+    } = useAssessmentModal(kid, user, onAssessmentUpdate); // Desestructura los valores retornados del hook
 
     return (
         <>
+            {/* Botón que abre el modal, activa la función handleShow */}
             <button className='kinder-button' onClick={handleShow}>
                 <FontAwesomeIcon icon={faPlus} /> Añadir evaluación
             </button>
 
+            {/* Modal que se muestra al hacer clic en el botón */}
             <Modal show={showModal} onHide={handleClose} className='kinder-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Añadir Evaluación</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {/* Formulario para agregar una nueva evaluación */}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formBookTitle">
                             <Form.Label>Contenido</Form.Label>
                             <Form.Control
-                                as="textarea"
-                                rows={8}
-                                placeholder="Escribe aquí los datos de la evaluación"
+                                as="textarea" // Especifica que el control es un área de texto
+                                rows={8} // Número de filas visibles
+                                placeholder="Escribe aquí los datos de la evaluación" // Texto de ayuda
                                 name="contenido"
-                                onChange={(e) => setContent(e.target.value)}
-                                required
+                                value={content} // Vincula el contenido del área de texto con el estado
+                                onChange={(e) => setContent(e.target.value)} // Actualiza el contenido a medida que el usuario escribe
+                                required // Campo requerido
                             />
                         </Form.Group>
 
                         <Modal.Footer>
+                            {/* Botón para enviar el formulario, deshabilitado mientras se carga */}
                             <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={loading}
+                                variant="primary" // Estilo del botón
+                                type="submit" // Tipo de botón
+                                disabled={loading} // Deshabilita el botón si loading es true
                             >
-                                {loading ? 'Guardando...' : 'Guardar'}
+                                {loading ? 'Guardando...' : 'Guardar'} {/* Texto dinámico según el estado de carga */}
                             </Button>
                         </Modal.Footer>
                     </Form>
                 </Modal.Body>
             </Modal>
-
-            <ToastContainer />
         </>
     );
 }

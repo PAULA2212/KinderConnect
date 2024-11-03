@@ -1,47 +1,53 @@
-const promisePool = require('../../services/database'); // Conexión con tu base de datos
-const uploadImage = require('../../services/uploadImageService'); // Servicio para subir la imagen a Cloudinary
+// Importa el servicio de conexión a la base de datos
+const promisePool = require('../../services/database'); 
+// Importa el servicio para subir imágenes a Cloudinary
+const uploadImage = require('../../services/uploadImageService'); 
 
-// Controlador para subir archivos
+// Controlador para subir archivos relacionados con niños
 const uploadKidFile = async (req, res) => {
-    const { nombre, kid_id } = req.body; // ID del niño relacionado con el archivo subido
-    const fecha_subida = new Date();
-    let file_url = null;
+    // Extrae el nombre del archivo y el ID del niño del cuerpo de la solicitud
+    const { nombre, kid_id } = req.body; 
+    const fecha_subida = new Date(); // Obtiene la fecha y hora actuales
+    let file_url = null; // Variable para almacenar la URL del archivo subido
 
     try {
+        // Verifica si hay un archivo en la solicitud y si su ruta es válida
         if (req.file && req.file.path) {
-            // Subimos el archivo a Cloudinary
+            // Llama al servicio de subida de imagen para subir el archivo a Cloudinary
             file_url = await uploadImage(req.file.path);
 
+            // Verifica si la URL devuelta es válida
             if (!file_url) {
-                // Si no se obtiene una URL válida después de subir la imagen, lanzamos un error
+                // Si no se obtiene una URL válida, lanza un error
                 throw new Error('Error al subir el archivo a Cloudinary.');
             }
 
+            // Guarda la URL del archivo subido en la base de datos
+            await promisePool.query("INSERT INTO documentos_niños (nombre, url, fecha_subida, id_niño) VALUES (?, ?, ?, ?)", [nombre, file_url, fecha_subida, kid_id]);
 
-        // Guardar la URL del archivo subido en la base de datos
-        await promisePool.query("INSERT INTO documentos_niños (nombre,url,fecha_subida,id_niño) VALUES (?,?,?,?)", [nombre, file_url, fecha_subida, kid_id]);
-
-        // Si la inserción es exitosa, enviamos una respuesta positiva
-        res.status(200).json({
-            success: true,
-            message: 'Archivo subido y registrada correctamente.',
-            file_url: file_url
-        });
-        } else {
-        // Si no se proporciona un archivo, devolvemos un error
-        return res.status(400).json({
-            success: false,
-            message: 'No se proporcionó ninguna documento.'
+            // Si la inserción es exitosa, envía una respuesta positiva
+            res.status(200).json({
+                success: true,
+                message: 'Archivo subido y registrado correctamente.',
+                file_url: file_url // Devuelve la URL del archivo subido
             });
-         }
+        } else {
+            // Si no se proporciona un archivo, devuelve un error con estado 400 (Bad Request)
+            return res.status(400).json({
+                success: false,
+                message: 'No se proporcionó ningún documento.'
+            });
+        }
     } catch (error) {
-    // Si ocurre algún error, devolvemos una respuesta con el mensaje de error
-    console.error('Error:', error);
-    return res.status(500).json({
-        success: false,
-        message: 'Ocurrió un error al subir el archivo o registrar los datos.',
-        error: error.message
-    });
-}
+        // Si ocurre algún error, lo registra en la consola y devuelve una respuesta con el mensaje de error
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Ocurrió un error al subir el archivo o registrar los datos.',
+            error: error.message // Incluye el mensaje de error para mayor claridad
+        });
+    }
 };
+
+// Exporta la función uploadKidFile para su uso en otras partes de la aplicación
 module.exports = uploadKidFile;

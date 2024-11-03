@@ -29,7 +29,7 @@
        display: flex; /* Flexbox para alineación */
        justify-content: space-between; /* Espacio entre el título y el icono */
        align-items: center;  /* Alineación vertical centrada */
-       font-family: 'kinderfont'; /* Fuente personalizada */
+       font-family: 'kinderfont2'; /* Fuente personalizada */
        font-size: x-large; /* Tamaño de fuente grande */
        font-weight: bold;
        gap: 1rem; /* Texto en negrita */
@@ -142,7 +142,7 @@
 
 .kinder-modal .modal-title {
     color: #035d6c; /* Cambia el color del texto del título */
-    font-family: 'kinderfont';
+    font-family: 'kinderfont2';
     font-weight: bold;
 }
 

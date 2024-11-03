@@ -1,7 +1,7 @@
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 4fr;
-    grid-template-rows: 100px 10fr 1fr;
+    grid-template-rows: 100px 18fr 1fr;
     grid-template-areas: 
         "header header"
         "sidebar main"
@@ -12,7 +12,6 @@
 
 .gridheader {
     grid-area: header;
-    background-color: lightblue; /* Opcional: solo para visualización */
     position: sticky;
     top: 0;  /* Asegúrate de que el header esté en la parte superior */
     z-index: 2; /* Asegúrate de que el header esté sobre otros elementos si es necesario */
@@ -37,7 +36,6 @@
 
 .gridfooter {
     grid-area: footer;
-    background-color: lightcoral; /* Opcional: solo para visualización */
 }
 
 @media screen and (max-width: 768px) {

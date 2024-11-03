@@ -1,0 +1,56 @@
+/* Welcome.css */
+
+/* Contenedor principal que asegura la posición relativa */
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo del texto animado */
+.tracking-in-expand {
+    font-family: 'kinderfont2';
+    position: absolute;  /* Posición absoluta para superponer el texto */
+    top: 20%;  /* Ajusta según la altura que prefieras */
+    left: 20%;  /* Centrado horizontalmente */
+    transform: translateX(-50%);  /* Centra el texto horizontalmente */
+    z-index: 1;  /* Asegura que el texto esté por encima de las animaciones */
+    font-size: 8rem;  /* Tamaño del texto en pantallas grandes */
+    text-align: center;  /* Centra el texto */
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);  /* Sombra elegante del texto */
+    transform-origin: center;  /* Establece el centro del texto como punto de expansión */
+    animation: text-expand 2s ease-in-out forwards;  /* Aplica la animación */
+}
+
+/* Animación para expandir el texto desde el centro */
+@keyframes text-expand {
+    0% {
+        transform: scaleX(0);  /* El texto está colapsado en el eje X, partiendo del centro */
+        opacity: 0;  /* Texto oculto */
+    }
+    50% {
+        opacity: 0.6;  /* El texto comienza a aparecer */
+    }
+    100% {
+        transform: scaleX(1);  /* El texto se expande completamente a su tamaño normal en el eje X */
+        opacity: 1;  /* El texto es completamente visible */
+    }
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 768px) {
+    .tracking-in-expand {
+        font-size: 5rem;  /* Reduce el tamaño de la fuente en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .tracking-in-expand {
+        font-size: 3rem;  /* Reduce aún más el tamaño de la fuente en pantallas muy pequeñas */
+    }
+}

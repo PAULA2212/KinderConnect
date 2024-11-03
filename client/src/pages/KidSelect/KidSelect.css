@@ -13,11 +13,8 @@
        align-content: space-between;
 }
 .selected-kid-message{
-    margin: 1rem;
     font-size: 20px;
 }
-@media (min-width: 900px) {
-    .select-form{
-        grid-template-columns: 1fr 1fr;
-    }
+.form-input{
+    margin-bottom: 1rem;
 }

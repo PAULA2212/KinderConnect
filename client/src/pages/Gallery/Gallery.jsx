@@ -1,60 +1,39 @@
-import { useContext, useEffect, useState } from "react";
-import { KidContext } from "../../Context/KidContext";
-import { UserContext } from "../../Context/UserContext";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages, faSearch } from '@fortawesome/free-solid-svg-icons';
 import ModalGallery from "./ModalGallery";
-import { getImagesForKid } from "../../services/Gallery/getImagesForKidService";
-import { Carousel } from 'react-bootstrap'; // Bootstrap Carousel
+import { Carousel } from 'react-bootstrap';
 import './gallery.css';
+import { useGallery } from "./useGallery"; // Importa el custom hook
 
+/**
+ * Componente `Gallery`
+ * 
+ * Este componente renderiza la galería de imágenes del niño seleccionado, incluyendo:
+ * - Input de búsqueda para filtrar por fecha.
+ * - Modal para agregar nuevas imágenes (disponible solo para educadores).
+ * - Carrusel para mostrar imágenes filtradas.
+ * - Galería general de todas las imágenes.
+ * 
+ * @returns JSX del componente `Gallery`.
+ */
 export default function Gallery() {
-    const { kid } = useContext(KidContext);
-    const { profileType } = useContext(UserContext);
-    const [images, setImages] = useState([]);
-    const [filteredImages, setFilteredImages] = useState([]); // Imágenes filtradas por fecha
-    const [searchTerm, setSearchTerm] = useState("");
+    const {
+        kid,
+        profileType,
+        images,
+        filteredImages,
+        searchTerm,
+        setSearchTerm,
+        handleAddImage,
+    } = useGallery(); // Usa el hook personalizado para manejar el estado
 
-    // Función para obtener las imágenes del niño
-    const fetchImages = async () => {
-        if (kid && kid.id_niño) {
-            try {
-                const data = await getImagesForKid(kid.id_niño);
-                setImages(data);
-            } catch (error) {
-                console.error('Error al obtener imágenes:', error);
-            }
-        }
-    };
-
-    useEffect(() => {
-        fetchImages();
-    }, [kid]);
-
-    const handleAddImage = async () => {
-        await fetchImages(); // Actualiza la lista de imágenes después de agregar una
-    };
-
-    // Filtrar imágenes por fecha para el carrusel
-    useEffect(() => {
-        if (searchTerm) {
-            const filtered = images.filter(image => 
-                new Date(image.fecha_subida).toISOString().slice(0, 10) === searchTerm
-            );
-            setFilteredImages(filtered); // Establece las imágenes filtradas
-        } else {
-            setFilteredImages([]); // No hay filtro, no mostrar nada en el carrusel
-        }
-    }, [searchTerm, images]);
-
+    // Si no hay un niño seleccionado, muestra un mensaje informativo
     if (kid === null) {
         return (
             <>
                 <h3 className='kinder-title'><FontAwesomeIcon icon={faImages} /> Galería de imágenes</h3>
                 <div>
                     <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
-                    <Link to="/layout/elegirniño">Seleccionar niño</Link>
                 </div>
             </>
         );
@@ -64,7 +43,7 @@ export default function Gallery() {
         <>
             <h3 className='kinder-title'><FontAwesomeIcon icon={faImages} /> Galería de imágenes de {kid.nombre}</h3>
 
-            {/* Mostrar el modal para agregar imágenes si es educador */}
+            {/* Modal de subida de imágenes, solo visible para educadores */}
             {profileType === "educador" && (
                 <ModalGallery kid={kid} onAddImage={handleAddImage} />
             )}

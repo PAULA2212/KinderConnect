@@ -1,102 +1,75 @@
+// Importamos los componentes necesarios para el modal. Usamos FontAwesome para los iconos,
+// Bootstrap para los estilos y manejo de modales, y un hook personalizado `useModalDocuments`.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { toast } from "react-toastify";
 import { Modal, Form, Button } from 'react-bootstrap';
-import { addDocument } from "../../services/AdminDocuments/uploadDocumentsService";
+import useModalDocuments from "./useModalDocuments"; // Hook personalizado que gestiona el estado del modal
 
-
-
-export default function ModalDocuments({profileType, user, kid, onAddDocument}) {
-
-    const [showModal, setShowModal] = useState(false);
-    const [file, setFile] = useState(null); // Cambié a null para los archivos
-    const [documentName, setDocumentName] = useState("")
-    const [loading, setLoading] = useState(false);
-
-    const handleShow = () => {
-        setShowModal(true);
-    };
-
-    const handleClose = () => {
-        setShowModal(false);
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        if (!file) {
-            toast.error("Por favor, selecciona un documento PDF.", { autoClose: 3000 });
-            return;
-        }
-
-        if (file.type !== "application/pdf") {
-            toast.error("Solo se permiten documentos PDF.", { autoClose: 3000 });
-            return;
-        }
-
-        setLoading(true);
-
-        // Aquí puedes manejar el envío del archivo
-        const formData = new FormData();
-        formData.append("documento", file); // Agrega el archivo PDF
-        formData.append("nombre", documentName); // Agrega el nombre del documento
-        formData.append("kid_id", profileType === "progenitor" ? kid.id_niño : null);
-        formData.append("id_educador", profileType === "progenitor" ? null : user.id_educador)
-        try {
-            // Llama a la función que maneja la subida
-            await addDocument(formData, profileType);
-            // Suponiendo que se ha subido el documento con éxito
-            toast.success("Documento subido correctamente.", { autoClose: 3000 });
-            onAddDocument(); // Función para refrescar la lista de documentos
-            setShowModal(false);
-            setFile(null); // Reinicia el archivo
-        } catch (error) {
-            toast.error("Hubo un error al subir el documento.", { autoClose: 3000 });
-        } finally {
-            setLoading(false);
-            handleClose();
-        }
-    };
+// Este componente maneja la lógica de subir documentos mediante un modal.
+// Recibe `profileType`, `user`, `kid`, y `onAddDocument` como props, que determinan 
+// el comportamiento dependiendo del tipo de usuario y del niño seleccionado (si aplica).
+export default function ModalDocuments({ profileType, user, kid, onAddDocument }) {
+    // Extraemos el estado y las funciones del hook `useModalDocuments`.
+    const {
+        showModal,          // Estado que determina si el modal está visible
+        handleShow,         // Función para mostrar el modal
+        handleClose,        // Función para cerrar el modal
+        handleSubmit,       // Función para manejar el submit del formulario
+        loading,            // Estado de carga durante la subida del archivo
+        setFile,            // Función para establecer el archivo PDF a subir
+        documentName,       // Nombre del documento
+        setDocumentName,    // Función para establecer el nombre del documento
+    } = useModalDocuments(profileType, user, kid, onAddDocument);
 
     return (
         <>
+            {/* Botón que abre el modal para subir un documento */}
             <button className='kinder-button' onClick={handleShow}>
                 <FontAwesomeIcon icon={faPlus} /> Subir documento
             </button>
+
+            {/* Modal de Bootstrap para la subida de documentos */}
             <Modal show={showModal} onHide={handleClose} className='kinder-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Añadir documento PDF</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {/* Formulario para añadir un documento, el submit está manejado por handleSubmit */}
                     <Form onSubmit={handleSubmit} encType="multipart/form-data">
+                        
+                        {/* Campo para ingresar el nombre del documento */}
                         <Form.Group controlId="nombreDocumento">
                             <Form.Label>Nombre del documento</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Ingrese un nombre para el documento"
-                                value={documentName} // Estado para el nombre del documento
-                                onChange={(e) => setDocumentName(e.target.value)} // Actualiza el estado
+                                value={documentName} // El valor es el estado actual del nombre
+                                onChange={(e) => setDocumentName(e.target.value)} // Actualiza el nombre en el estado
                                 required
                             />
                         </Form.Group>
+                        
+                        {/* Campo para subir un archivo PDF */}
                         <Form.Group controlId="documento">
                             <Form.Label>Subir documento PDF</Form.Label>
                             <Form.Control
-                                type="file" // Tipo de archivo
-                                accept=".pdf" // Acepta solo archivos PDF
-                                onChange={(e) => setFile(e.target.files[0])} // Guarda el archivo seleccionado
-                                name="documento" // Nombre del campo del archivo
+                                type="file"
+                                accept=".pdf" // Solo permite archivos con extensión .pdf
+                                onChange={(e) => setFile(e.target.files[0])} // Actualiza el archivo en el estado
+                                name="documento"
                                 required
                             />
                         </Form.Group>
 
+                        {/* Footer del modal, con un botón para enviar el formulario */}
                         <Modal.Footer>
+                            {/* El botón de guardar se desactiva mientras el archivo se está subiendo */}
                             <Button
                                 variant="primary"
                                 type="submit"
-                                disabled={loading}
+                                disabled={loading} // Deshabilita el botón si está en estado de carga
                             >
+                                {/* Cambia el texto del botón según el estado de carga */}
                                 {loading ? 'Guardando...' : 'Guardar'}
                             </Button>
                         </Modal.Footer>
@@ -104,6 +77,5 @@ export default function ModalDocuments({profileType, user, kid, onAddDocument}) 
                 </Modal.Body>
             </Modal>
         </>
-
     );
 }

@@ -1,74 +1,67 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react'
-import { Modal, Form, Button } from 'react-bootstrap'
-import {toast, ToastContainer} from 'react-toastify'
-import {addFood} from '../../services/Feeding/addFoodService'
+import { Modal, Form, Button } from 'react-bootstrap';
+import { useFeedingModal } from './useFeedingModal';
 
-export default function FeedingModal ({kid, onAddFood}){
-
-    const [food, setFood] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-
-    const openModal = () => { setShowModal(true) };
-    const closeModal = () => { setShowModal(false) };
-    
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        const data = {
-            idKid: kid.id_niño,
-            food: food
-        }
-        setLoading(true);
-        try{
-            await addFood(data);
-             onAddFood();
-            toast.success('El nuevo alimento se ha agredado a la lista.', {autoClose: 3000});
-            setShowModal(false);
-        }catch (error){
-            console.log(error)
-            toast.error('Ha habido un error al intentar agregar el alimento', {autoClose: 3000})
-        }finally{
-            setLoading(false)
-        }
-        }
+/**
+ * Componente `FeedingModal`
+ * 
+ * Este componente representa un modal que permite a los usuarios agregar un nuevo alimento
+ * para el niño seleccionado. Proporciona un formulario de entrada con validación, 
+ * feedback visual de carga y notificaciones.
+ * 
+ * @param {Object} kid - Objeto que representa al niño seleccionado, incluye un id necesario para el envío.
+ * @param {Function} onAddFood - Función de callback para actualizar la lista de alimentos tras la adición exitosa.
+ */
+export default function FeedingModal({ kid, onAddFood }) {
+    // Desestructura el hook `useFeedingModal`, que contiene toda la lógica de estado y funciones para este modal
+    const {
+        food,
+        loading,
+        showModal,
+        openModal,
+        closeModal,
+        handleSubmit,
+        handleChange,
+    } = useFeedingModal({ kid, onAddFood });
 
     return (
         <>
-        <button className='kinder-button' onClick={openModal}>
-            <FontAwesomeIcon icon={faPlus}/> Añadir 
-        </button>
-        <Modal show={showModal} onHide={closeModal} className='kinder-modal'>
-            <Modal.Header closeButton>
-                <Modal.Title>Añadir un nuevo alimento</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId='food'>
-                        <Form.Label>
-                            Alimento
-                        </Form.Label>
-                        <Form.Control
-                            type='text'
-                            required
-                            placeholder='zanahoria, lechuga, pavo, tomate..'
-                            name='food'
-                            onChange={(e)=>{setFood(e.target.value)}}
-                        ></Form.Control>
-                    </Form.Group>
-                    <Modal.Footer>
-                        <Button type='submit' disabled={loading}>
-                            {loading ? 'Guardando..' : 'Guardar'}
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal.Body>
-        </Modal>
-        <ToastContainer/>
+            {/* Botón principal que abre el modal de alimentación cuando el usuario desea agregar un alimento nuevo */}
+            <button className='kinder-button' onClick={openModal}>
+                <FontAwesomeIcon icon={faPlus} /> Añadir
+            </button>
+
+            {/* Modal de alimentación */}
+            <Modal show={showModal} onHide={closeModal} className='kinder-modal'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Añadir un nuevo alimento</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* Formulario para ingresar el alimento */}
+                    <Form onSubmit={handleSubmit}>
+                        {/* Grupo de formulario para el campo de entrada del nombre del alimento */}
+                        <Form.Group controlId='food'>
+                            <Form.Label>Alimento</Form.Label>
+                            {/* Campo de entrada de texto donde el usuario escribe el nombre del alimento */}
+                            <Form.Control
+                                type='text'
+                                required
+                                placeholder='zanahoria, lechuga, pavo, tomate..'
+                                name='food'
+                                value={food}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        {/* Botón de envío en el pie del modal, desactivado mientras el alimento se guarda */}
+                        <Modal.Footer>
+                            <Button type='submit' disabled={loading}>
+                                {loading ? 'Guardando..' : 'Guardar'}
+                            </Button>
+                        </Modal.Footer>
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </>
-    )
-
-
+    );
 }

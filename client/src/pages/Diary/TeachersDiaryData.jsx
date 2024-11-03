@@ -1,77 +1,52 @@
-import { useState, useContext, useEffect } from "react";
-import axiosInstance from "../../utils/axiosInstance";
-import { KidContext } from "../../Context/KidContext";
 import { Card, Container, Row, Col, Alert } from 'react-bootstrap';
 import { faBook, faPills, faComment } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Diary.css'; // Asegúrate de que tu CSS esté en la ruta correcta
+import './Diary.css'; 
+import { useTeachersDiaryData } from './useTeachersDiaryData';
 
-// Función para obtener los datos del diario del niño
-const fetchDiaryParentsData = async (kidId) => {
-    try {
-        const response = await axiosInstance.get(`/diario_para_educadores/${kidId}`);
-        console.log('Se han obtenido los siguientes datos fetch:', response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error al obtener los datos del diario del niño:', error);
-        throw error;
-    }
-};
-
-export default function TeachersDiaryData() {
-    const { kid } = useContext(KidContext);
-    const [dataKid, setDataKid] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        // Llamar a la función fetchDiaryParentsData si kid y kid.id_niño están definidos
-        const loadData = async () => {
-            if (kid && kid.id_niño) {
-                setLoading(true);
-                setError('');
-                try {
-                    const data = await fetchDiaryParentsData(kid.id_niño);
-                    setDataKid(data); // Actualiza el estado con los datos obtenidos
-                } catch (error) {
-                    setError('Todavia no hay datos para este niño.');
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setError('No se ha seleccionado un niño.');
-            }
-        };
-
-        loadData();
-    }, [kid]); // Dependencia en kid para que se ejecute cuando kid cambie
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
+/**
+ * Componente `TeachersDiaryData` que presenta un registro de datos del diario de un niño,
+ * proporcionando detalles sobre medicación y comentarios diarios para su consulta por educadores.
+ *
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.kid - Objeto con los datos del niño seleccionado.
+ * @returns {JSX.Element} UI renderizada para mostrar datos diarios de educadores.
+ */
+export default function TeachersDiaryData({ kid }) {
+    // Desestructuración de datos, estado de carga y error obtenidos del hook `useTeachersDiaryData`
+    const {
+        formatDate,
+        loading,
+        error,
+        dataKid
+    } = useTeachersDiaryData({ kid });
 
     return (
         <Container>
+            {/* Muestra un mensaje de carga mientras los datos están siendo recuperados */}
             {loading && <p>Cargando...</p>}
+            
+            {/* Muestra un mensaje de alerta en caso de error en la carga de datos */}
             {error && <Alert variant="warning">{error}</Alert>}
             
             <Row>
-                {dataKid.map((entry) => (
+                {/* Renderiza las tarjetas con información del niño si `dataKid` contiene registros */}
+                {dataKid.length > 0 && dataKid.map((entry) => (
                     <Col md={4} key={entry.id_registro} className="mb-3">
                         <Card className="diarycard">
+                            {/* Encabezado de la tarjeta que muestra la fecha del registro */}
                             <Card.Header>
                                 <FontAwesomeIcon icon={faBook} /> {formatDate(entry.fecha)}
                             </Card.Header>
+                            
                             <Card.Body>
+                                {/* Sección de medicación */}
                                 <Card.Title><FontAwesomeIcon icon={faPills} /> Medicaciones</Card.Title>
                                 <Card.Text>
                                     {entry.medicacion || 'No hay medicaciones para el día de hoy'}
                                 </Card.Text>
+                                
+                                {/* Sección de comentarios */}
                                 <Card.Title><FontAwesomeIcon icon={faComment} /> Comentarios</Card.Title>
                                 <Card.Text>
                                     {entry.comentarios || 'No hay comentarios para el día de hoy'}

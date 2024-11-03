@@ -1,71 +1,47 @@
-import { useState, useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { KidContext } from '../../Context/KidContext';
-import axiosInstance from "../../utils/axiosInstance";
 import './Diary.css';
+import { useParentsDiaryForm } from "./useParentsDiaryForm";
 
-export default function ParentsDiaryForm() {
-    const [showModal, setShowModal] = useState(false);
-    const [medicacion, setMedicacion] = useState('');
-    const [comentarios, setComentarios] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-
-    const { kid } = useContext(KidContext);
-
-    // Función para guardar los datos del diario
-    const saveDiaryEntry = async (data) => {
-        try {
-            const response = await axiosInstance.post('/diario_progenitores/insertar', data);
-            return response.data;
-        } catch (error) {
-            console.error('Error al guardar los datos:', error);
-            throw error;
-        }
-    };
-
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => {
-        setShowModal(false);
-        setSuccessMessage(''); // Limpiar mensaje de éxito al cerrar el modal
-    };
-
-    const handleSave = async () => {
-        if (!kid || !kid.id_niño) {
-            console.error("No se ha seleccionado un niño.");
-            return;
-        }
-
-        const data = {
-            id_niño: kid.id_niño,
-            fecha: new Date().toISOString().slice(0, 10), // Obtiene la fecha actual en formato YYYY-MM-DD
-            medicacion,
-            comentarios
-        };
-
-        try {
-            await saveDiaryEntry(data); // Llama a la función para guardar los datos
-            const formattedDate = new Date().toLocaleDateString(); // Formatear la fecha para mostrar
-            setSuccessMessage(`Tu registro del día ${formattedDate} se ha guardado correctamente.`);
-            handleClose(); // Cierra el formulario después de guardar (opcional)
-        } catch (error) {
-            setSuccessMessage('Error al guardar el registro. Por favor, intente nuevamente.');
-        }
-    };
+/**
+ * ParentsDiaryForm Component
+ * Este componente representa un formulario modal para que los padres ingresen información diaria relevante,
+ * como medicación y comentarios generales.
+ * Utiliza un custom hook `useParentsDiaryForm` para manejar la lógica del formulario, incluyendo mostrar
+ * y ocultar el modal, y guardar la información ingresada.
+ *
+ * @returns {JSX.Element} JSX que representa el formulario de diario para los padres.
+ */
+export default function ParentsDiaryForm({kid}) {
+    // Destructuración del custom hook para obtener métodos y estados necesarios
+    const {
+        handleSave,      // Función para guardar los cambios ingresados en el formulario
+        handleShow,      // Función para mostrar el modal
+        handleClose,     // Función para cerrar el modal
+        showModal,       // Estado booleano que determina si el modal está visible o no
+        medicacion,      // Estado para almacenar el valor de medicación
+        comentarios,     // Estado para almacenar el valor de comentarios
+        setMedicacion,   // Setter para actualizar el valor de medicación
+        setComentarios   // Setter para actualizar el valor de comentarios
+    } = useParentsDiaryForm({kid});
 
     return (
         <>
+            {/* Botón que abre el modal. Al hacer clic, se llama a handleShow para mostrar el modal */}
             <button onClick={handleShow} className="edit-icon">
                 <FontAwesomeIcon icon={faPencil} />
             </button>
 
+            {/* Modal de formulario para ingreso de datos de medicación y comentarios */}
             <Modal show={showModal} onHide={handleClose} centered className="kinder-modal">
                 <Modal.Header closeButton>
-                    <Modal.Title>Introduce los datos del dia</Modal.Title>
+                    <Modal.Title>Introduce los datos del día</Modal.Title>
                 </Modal.Header>
+                
                 <Modal.Body>
                     <Form className="kinder-form form-ParentsDiary">
+                        {/* Campo de entrada para la medicación */}
                         <Form.Group controlId="diaryMedication">
                             <Form.Label>Medicación</Form.Label>
                             <Form.Control
@@ -77,6 +53,8 @@ export default function ParentsDiaryForm() {
                                 className="form-input"
                             />
                         </Form.Group>
+                        
+                        {/* Campo de entrada para comentarios generales */}
                         <Form.Group controlId="diaryComments">
                             <Form.Label>Comentarios</Form.Label>
                             <Form.Control
@@ -89,13 +67,10 @@ export default function ParentsDiaryForm() {
                             />
                         </Form.Group>
                     </Form>
-                    {/* Mostrar el mensaje de éxito o error */}
-                    {successMessage && (
-                        <p className="success-message">{successMessage}</p>
-                    )}
                 </Modal.Body>
-                <Modal.Footer>
 
+                <Modal.Footer>
+                    {/* Botón para guardar los datos ingresados y cerrar el modal */}
                     <Button variant="primary" onClick={handleSave}>
                         Guardar Cambios
                     </Button>

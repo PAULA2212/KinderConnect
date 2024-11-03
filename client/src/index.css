@@ -4,7 +4,18 @@
     font-weight: normal;
     font-style: normal;
 }
-
+@font-face {
+    font-family: 'Kinderfont1';
+    src: url('./fonts/TheStudentsTeacher-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Kinderfont2';
+    src: url('./fonts/Vogue.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 * {
     box-sizing: border-box;
     margin: 0;

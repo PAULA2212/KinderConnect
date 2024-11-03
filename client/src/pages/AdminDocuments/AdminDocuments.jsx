@@ -1,141 +1,76 @@
+// AdminDocuments.jsx
+
+// Importaciones necesarias para el componente. Aquí usamos FontAwesome para iconos, 
+// componentes modales y tablas personalizados, y el custom hook `useAdminDocuments`.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
-import { KidContext } from '../../Context/KidContext';
-import { UserContext } from "../../Context/UserContext";
-import { Link } from 'react-router-dom';
 import ModalDocuments from "./ModalDocuments";
 import TablesDocForTeachers from "./TablesDocForTeachers";
 import TablesDocForParents from "./TablesDocForParents";
-import { getDocumentById } from "../../services/AdminDocuments/getDocumentByIdService";
-import { getDocumentByLink } from "../../services/AdminDocuments/getDocumentByLinkService";
-
+import useAdminDocuments from "./useAdminDocuments"; // Hook personalizado para manejar la lógica de los documentos
 
 export default function AdminDocuments() {
-    const { kid } = useContext(KidContext);
-    const { user, profileType } = useContext(UserContext);
-    const [kidDocs, setKidDocs] = useState([]);
-    const [teacherDocs, setTeacherDocs] = useState([]);
-    const [teacherDocsByLink, setTeacherDocsByLink] = useState([]);
-    const [kidDocsByLink, setKidDocsByLink] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // Extraemos los datos y funciones del hook `useAdminDocuments`, lo que centraliza la lógica de carga de documentos y actualizaciones.
+    const {
+        user,                    // Datos del usuario actual (progenitor o educador)
+        kid,                     // Datos del niño (si aplica)
+        profileType,             // Tipo de perfil (educador o progenitor)
+        kidDocs,                 // Documentos asociados al niño
+        teacherDocs,             // Documentos subidos por el educador
+        teacherDocsByLink,       // Documentos de los educadores visibles para los padres
+        kidDocsByLink,           // Documentos de los niños visibles para los educadores
+        loading,                 // Estado de carga de los documentos
+        handleAddorDelDocsForEducator, // Función para gestionar la adición/eliminación de documentos para educadores
+        handleAddorDelDocsForParent    // Función para gestionar la adición/eliminación de documentos para progenitores
+    } = useAdminDocuments();
 
-    // Funciones para obtener documentos
-    const fetchKidDocById = async () => {
-        if (kid && kid.id_niño) {
-            try {
-                const data = await getDocumentById(kid.id_niño, "kid");
-                setKidDocs(data);
-            } catch (error) {
-                console.error('Error al obtener documentos del niño:', error);
-            }
-        }
-    };
-
-    const fetchTeacherDocById = async () => {
-        if (user && user.id_educador) {
-            try {
-                const data = await getDocumentById(user.id_educador, "educador");
-                setTeacherDocs(data);
-            } catch (error) {
-                console.error('Error al obtener documentos del profesor:', error);
-            }
-        }
-    };
-
-    const fetchKidDocByTeacherLink = async () => {
-        if (user && user.id_educador) {
-            try {
-                const data = await getDocumentByLink(user.id_educador, "educador");
-                setKidDocsByLink(data);
-            } catch (error) {
-                console.error('Error al obtener documentos por link del profesor:', error);
-            }
-        }
-    };
-
-    const fetchTeacherDocByKidLink = async () => {
-        if (kid && kid.id_niño) {
-            try {
-                const data = await getDocumentByLink(kid.id_niño, "kid");
-                setTeacherDocsByLink(data);
-            } catch (error) {
-                console.error('Error al obtener documentos por link del niño:', error);
-            }
-        }
-    };
-
-    const fetchDataForEducator = async () => {
-        await Promise.all([
-            fetchTeacherDocById(),
-            fetchKidDocByTeacherLink(),
-        ]);
-    };
-    
-    const fetchDataForParent = async () => {
-        await Promise.all([
-            fetchKidDocById(),
-            fetchTeacherDocByKidLink(),
-        ]);
-    };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-
-            try {
-                if (profileType === 'educador') {
-                    await fetchDataForEducator();
-                } else if (profileType === 'progenitor' && kid) {
-                    await fetchDataForParent();
-                }
-            } catch (error) {
-                console.error("Error fetching documents:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        // Llama a fetchData solo cuando el usuario o el niño están disponibles.
-        if ((profileType === 'educador' && user) || (profileType === 'progenitor' && kid)) {
-            fetchData();
-        }
-    }, [kid, profileType, user]);
-
-    const handleAddorDelDocs = async() => {
-        if (profileType === 'educador') {
-            await fetchDataForEducator();
-        } else if (profileType === 'progenitor' && kid) {
-            await fetchDataForParent();
-        }
-    };
-
-    // Mostrar estado de carga
-    if (loading) {
-        return <p>Cargando documentos...</p>;
-    }
-
-    // Caso específico para progenitor sin niño seleccionado
-    if (kid === null && profileType === "progenitor") {
+    // Si el usuario es un progenitor y no tiene un niño seleccionado, mostramos un mensaje
+    // que indica que debe seleccionar un niño para ver los documentos.
+    if (!kidDocs && !teacherDocs && loading) {
         return (
             <>
                 <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
                 <div>
                     <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
-                    <Link to="/layout/elegirniño">Seleccionar niño</Link>
                 </div>
             </>
         );
     }
 
+    // Mientras los documentos están cargando (estado de carga), mostramos un mensaje de "Cargando documentos..."
+    if (loading) {
+        return <p>Cargando documentos...</p>;
+    } 
+
     return (
         <>
+            {/* Título de la página con un icono de archivo */}
             <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
-            <ModalDocuments kid={kid} profileType={profileType} user={user} onAddDocument={handleAddorDelDocs} />
+
+            {/* Modal para subir documentos. La función para manejar la adición de documentos varía
+                según si el perfil es de un educador o de un progenitor */}
+            <ModalDocuments 
+                kid={kid} // Pasamos el niño seleccionado (si aplica)
+                profileType={profileType} // El tipo de perfil (educador o progenitor)
+                user={user} // Información del usuario actual
+                onAddDocument={profileType === 'educador' ? handleAddorDelDocsForEducator : handleAddorDelDocsForParent} // Función específica según el tipo de usuario
+            />
+
+            {/* Si el usuario es un educador, mostramos la tabla para educadores */}
             {profileType === "educador" ? (
-                <TablesDocForTeachers teacherDocs={teacherDocs} kidDocs={kidDocsByLink} onAddorDelDocs={handleAddorDelDocs}/>
+                <TablesDocForTeachers 
+                    teacherDocs={teacherDocs} // Documentos del educador
+                    kidDocs={kidDocsByLink}   // Documentos de los niños que el educador puede ver
+                    onAddorDelDocs={handleAddorDelDocsForEducator} // Función para refrescar los documentos al agregar/eliminar
+                />
             ) : (
-                <TablesDocForParents kid={kid} kidDocs={kidDocs} teachersDocs={teacherDocsByLink} onAddorDelDocs={handleAddorDelDocs}/>
+                // Si el usuario es un progenitor, mostramos la tabla para progenitores
+                <TablesDocForParents 
+                    kid={kid} // Datos del niño seleccionado
+                    kidDocs={kidDocs} // Documentos del niño
+                    teachersDocs={teacherDocsByLink} // Documentos subidos por los educadores visibles para los padres
+                    onAddorDelDocs={handleAddorDelDocsForParent} // Función para refrescar los documentos al agregar/eliminar
+                />
             )}
         </>
     );

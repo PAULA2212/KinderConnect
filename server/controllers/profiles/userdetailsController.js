@@ -1,10 +1,15 @@
 const promisePool = require('../../services/database');
 
+/**
+ * Obtiene los detalles de un usuario basado en su ID y tipo de perfil.
+ *
+ * @param {Object} req - Objeto de solicitud que representa la solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta que se utiliza para enviar la respuesta al cliente.
+ */
 const userDetails = async (req, res) => {
-
     console.log('Datos recibidos en req.params:', req.params);
     const { userId, perfil } = req.params;
-    console.log()
+
     // Validar que userId sea un número y perfil sea uno de los valores permitidos
     if (isNaN(userId) || !['progenitor', 'educador'].includes(perfil)) {
         console.log('Error: Parámetros inválidos');
@@ -12,6 +17,7 @@ const userDetails = async (req, res) => {
     }
 
     let query;
+    // Determinar la consulta SQL basada en el tipo de perfil
     if (perfil === 'progenitor') {
         query = 'SELECT * FROM progenitores WHERE id_progenitor = ?';
     } else if (perfil === 'educador') {
@@ -21,6 +27,7 @@ const userDetails = async (req, res) => {
     try {
         const [rows] = await promisePool.query(query, [userId]);
         console.log('Resultado de la búsqueda del usuario para detalles:', rows);
+        
         if (rows.length > 0) {
             res.json(rows[0]); // Devolver el primer resultado
         } else {
@@ -33,4 +40,4 @@ const userDetails = async (req, res) => {
     }
 };
 
-module.exports = userDetails
+module.exports = userDetails;

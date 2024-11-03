@@ -1,19 +1,14 @@
+import React from 'react';
 import { Table } from 'react-bootstrap';
-import './allergies.css';
+import useAllergiesTable from './useAllergiesTable';  // Importamos el custom hook
+import './allergies.css';  // Importamos el archivo de estilos CSS
 
+// Componente principal para mostrar la tabla de alergias
 export default function AllergiesTable({ type, values }) {
-    const getRowClass = (type) => {
-        switch (type) {
-            case 'grave':
-                return ' bg-danger';
-            case 'moderada':
-                return 'bg-warning';
-            case 'leve':
-                return 'bg-info';
-            default:
-                return '';
-        }
-    };
+    // Usamos el custom hook para obtener las funciones y datos necesarios
+    const { getRowClass, normalizedValues, allergenIcons } = useAllergiesTable(type, values);
+
+    // Si no hay valores de alergias, mostramos un mensaje en el centro
     if (values.length === 0) {
         return (
             <div className="text-center">
@@ -21,6 +16,8 @@ export default function AllergiesTable({ type, values }) {
             </div>
         );
     }
+
+    // Retornamos la tabla con las alergias, aplicando clases y mostrando íconos si están disponibles
     return (
         <Table className={getRowClass(type)} >
             <thead>
@@ -29,9 +26,20 @@ export default function AllergiesTable({ type, values }) {
                 </tr>
             </thead>
             <tbody>
-                {values.map((value) => (
-                    <tr key={value.id_registro}  >
-                        <td >{value.alergeno}</td>
+                {normalizedValues.map((value) => (
+                    <tr key={value.id_registro}>
+                        <td>
+                            {value.iconName ? (
+                                <img 
+                                    src={allergenIcons[value.iconName]}  // Muestra el ícono si está disponible
+                                    alt={value.iconName} 
+                                    className="allergen-icon" 
+                                    style={{ width: '40px', height: '40px', marginRight: '10px' }} 
+                                />
+                            ) : (
+                                <span>{value.alergeno}</span>  // Si no hay ícono, muestra solo el nombre del alérgeno
+                            )}
+                        </td>
                     </tr>
                 ))}
             </tbody>

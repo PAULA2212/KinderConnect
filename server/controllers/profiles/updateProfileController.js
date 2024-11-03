@@ -1,5 +1,11 @@
 const promisePool = require('../../services/database');
 
+/**
+ * Actualiza el perfil de un progenitor o educador en la base de datos.
+ *
+ * @param {Object} req - Objeto de solicitud que representa la solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta que se utiliza para enviar la respuesta al cliente.
+ */
 const updateProfile = async (req, res) => {
     const {
         profileType, // Tipo de perfil ('progenitor' o 'educador')
@@ -62,8 +68,8 @@ const updateProfile = async (req, res) => {
         res.status(200).json({ message: 'Perfil actualizado exitosamente' });
     } catch (error) {
         console.error('Error al actualizar el perfil:', error);
-        res.status(500).json({ message: 'Error al actualizar el perfil', error });
+        res.status(500).json({ message: 'Error al actualizar el perfil', error: error.message });
     }
 };
 
-module.exports = updateProfile
+module.exports = updateProfile;

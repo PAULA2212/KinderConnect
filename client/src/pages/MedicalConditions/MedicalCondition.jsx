@@ -1,57 +1,51 @@
-import { useContext, useEffect, useState } from "react";
-import { KidContext } from '../../Context/KidContext'
+// MedicalConditions.js
+import { useContext } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { faKitMedical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 import MedicalModal from "./MedicalModal";
-import { getConditions } from "../../services/MedicalConditions/getConditionService";
 import { Card } from "react-bootstrap";
+import { useMedicalCondition } from "./useMedicalCondition";
 
+/**
+ * MedicalConditions:
+ * Componente de presentación para visualizar y gestionar las condiciones médicas de un niño.
+ * Usa el custom hook useMedicalConditions para manejar la lógica de datos.
+ *
+ * @returns {JSX.Element} - Componente de condiciones médicas
+ */
+export default function MedicalConditions() {
+    const { kid, conditions, handleAddCondition } = useMedicalCondition();
+    const { profileType } = useContext(UserContext);
 
-export default function MedicalConditions(){
-    const {kid} = useContext(KidContext)
-    const {profileType} = useContext(UserContext)
-    const [conditions, setConditions] = useState([])
-    const fetchConditions = async () => {
-        if (kid && kid.id_niño) {
-            try {
-                const data = await getConditions(kid.id_niño);
-                console.log('Datos recibidos:', data);
-                setConditions(data);
-            } catch (error) {
-                console.error('Error al obtener condiciones:', error);
-            }
-        }
-    }
-    
-    useEffect(()=>{
-        
-        fetchConditions()
-    }, [kid])
-
-    const handleAddCondition = async ()=>{
-        await fetchConditions()
-    }
-
-    if (kid === null) {
+    // Muestra un mensaje cuando no se ha seleccionado ningún niño
+    if (!kid) {
         return (
             <>
-                <h1 className="kinder-title"><FontAwesomeIcon icon={faKitMedical} />  Condiciones Medicas</h1>
+                <h1 className="kinder-title">
+                    <FontAwesomeIcon icon={faKitMedical} /> Condiciones Médicas
+                </h1>
                 <div>
                     <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
-                    <Link to="/layout/elegirniño">Seleccionar niño</Link>
                 </div>
             </>
         );
     }
-    return(
+
+    // Renderiza el contenido del componente cuando hay un niño seleccionado
+    return (
         <>
-        <h1 className="kinder-title"><FontAwesomeIcon icon={faKitMedical} />  Condiciones Medicas de {kid.nombre}</h1>
-        {profileType === 'progenitor' && (
-            <MedicalModal kid={kid} onAddCondition={handleAddCondition}/>
-        )}
-        {conditions.length === 0 ? (
+            <h1 className="kinder-title">
+                <FontAwesomeIcon icon={faKitMedical} /> Condiciones Médicas de {kid.nombre}
+            </h1>
+
+            {/* Muestra el modal para añadir condiciones solo si el perfil es progenitor */}
+            {profileType === "progenitor" && (
+                <MedicalModal kid={kid} onAddCondition={handleAddCondition} />
+            )}
+
+            {/* Muestra un mensaje cuando no hay condiciones, o bien la lista de condiciones */}
+            {conditions.length === 0 ? (
                 <p>No hay condiciones médicas especiales para {kid.nombre}.</p>
             ) : (
                 conditions.map((condition) => (

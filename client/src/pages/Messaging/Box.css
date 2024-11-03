@@ -1,0 +1,52 @@
+.box-container {
+    margin-top: 20px;
+}
+
+.inbox-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.inbox-table thead {
+    background-color: #f5f5f5;
+}
+
+.inbox-table th {
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+}
+
+.inbox-table td {
+    padding: 10px 15px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.inbox-table td:first-child {
+    font-weight: bold;
+    color: #333;
+}
+
+.icon-eye {
+    cursor: pointer;
+    color: #3dc0c0;
+    transition: color 0.3s;
+}
+
+.icon-eye:hover {
+    color: #035d6c;
+}
+
+.inbox-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.unread-message {
+    font-weight:900;
+}
+

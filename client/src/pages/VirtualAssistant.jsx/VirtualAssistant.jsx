@@ -1,25 +1,38 @@
 import { useState } from "react";
-import { sendMessageToAssistant } from "../../services/VirtualAssistant/virtualAsistantService";
+import { sendMessageToAssistant } from "../../services/virtualAsistantService";
 import { faPaperPlane, faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import './VirtualAssistant.css'; // Asegúrate de importar el CSS
+import './VirtualAssistant.css'; 
 
+/**
+ * Componente VirtualAssistant
+ * 
+ * Este componente implementa un asistente virtual interactivo que permite a los usuarios 
+ * enviar mensajes y recibir respuestas automáticas de un servicio de asistencia virtual.
+ * Está diseñado para ayudar a los usuarios en temas relacionados con el desarrollo infantil, 
+ * proporcionando información y asistencia en tiempo real.
+ */
 export default function VirtualAssistant() {
+    // Estado para almacenar los mensajes del chat, inicializando con un mensaje de bienvenida del asistente
     const [messages, setMessages] = useState([
         { sender: 'assistant', text: '¡Hola! Soy un experto en desarrollo infantil, y estoy aquí para ayudarte. ¿En qué te puedo asistir hoy?' }
     ]);
     
+    // Estado para controlar la entrada de texto del usuario
     const [input, setInput] = useState('');
 
+    // Función para manejar el envío del mensaje
     const handleSend = async () => {
+        // Evita enviar mensajes vacíos
         if (!input) return;
 
-        // Añade el mensaje del usuario a la lista
+        // Añade el mensaje del usuario a la lista de mensajes
         setMessages((prevMessages) => [...prevMessages, { sender: 'user', text: input }]);
 
         try {
+            // Envía el mensaje al asistente y espera su respuesta
             const assistantReply = await sendMessageToAssistant(input);
-            // Añade la respuesta del asistente
+            // Añade la respuesta del asistente a la lista de mensajes
             setMessages((prevMessages) => [...prevMessages, { sender: 'assistant', text: assistantReply }]);
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
@@ -27,6 +40,7 @@ export default function VirtualAssistant() {
             setMessages((prevMessages) => [...prevMessages, { sender: 'assistant', text: 'Error al obtener respuesta.' }]);
         }
 
+        // Limpia el campo de entrada después de enviar el mensaje
         setInput('');
     };
 
@@ -37,6 +51,7 @@ export default function VirtualAssistant() {
                     <h4 className="kinder-title"><FontAwesomeIcon icon={faComments} /> Asistente Virtual</h4>
                 </div>
                 <div className="card-body chat-box" style={{ height: '400px', overflowY: 'scroll' }}>
+                    {/* Renderiza todos los mensajes en el chat */}
                     {messages.map((msg, index) => (
                         <div key={index} className={`d-flex mb-3 ${msg.sender === 'user' ? 'justify-content-end' : 'justify-content-start'}`}>
                             <div className={`message-bubble p-2 rounded ${msg.sender === 'user' ? 'bg-user' : 'bg-assistant'}`}>
@@ -52,7 +67,7 @@ export default function VirtualAssistant() {
                             className="form-control"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSend()} // Permite enviar el mensaje al presionar Enter
                             placeholder="Escribe tu mensaje..."
                         />
                         <button className="btn" onClick={handleSend}>

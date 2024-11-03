@@ -5,7 +5,6 @@ import { Container, Row } from 'react-bootstrap';
 
 export default function BookList({ books, loading }) {
 
-
   return (
     <Container>
       <Row className="justify-content-center">

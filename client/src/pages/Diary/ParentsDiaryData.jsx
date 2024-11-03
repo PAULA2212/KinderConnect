@@ -1,73 +1,44 @@
-import { useState, useContext, useEffect } from "react";
-import axiosInstance from "../../utils/axiosInstance";
-import { KidContext } from "../../Context/KidContext";
 import { Card, Container, Row, Col, Alert } from 'react-bootstrap';
 import { faUtensils, faBed, faCommentDots, faListAlt, faPoo, faTint } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Diary.css'; // Asegúrate de que tu CSS esté en la ruta correcta
+import './Diary.css';
+import { useParentsDiaryData } from './useParentsDiaryData';
 
-// Función para obtener los datos del diario para padres
-const fetchDiaryForParentsData = async (kidId) => {
-    try {
-        const response = await axiosInstance.get(`/diario_para_progenitores/${kidId}`);
-        console.log('Se han obtenido los siguientes datos fetch:', response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error al obtener los datos del diario para padres:', error);
-        throw error;
-    }
-};
-
-export default function ParentsDiaryData() {
-    const { kid } = useContext(KidContext);
-    const [dataKid, setDataKid] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        // Llamar a la función fetchDiaryForParentsData si kid y kid.id_niño están definidos
-        const loadData = async () => {
-            if (kid && kid.id_niño) {
-                setLoading(true);
-                setError('');
-                try {
-                    const data = await fetchDiaryForParentsData(kid.id_niño);
-                    setDataKid(data); // Actualiza el estado con los datos obtenidos
-                } catch (error) {
-                    setError('Todavia no hay registros para el niño.');
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setError('No se ha seleccionado un niño.');
-            }
-        };
-
-        loadData();
-    }, [kid]); // Dependencia en kid para que se ejecute cuando kid cambie
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    };
+/**
+ * Componente que muestra los datos del diario de un niño seleccionado en un formato de tarjeta.
+ * Utiliza `useParentsDiaryData` para gestionar el estado de datos, carga y errores.
+ *
+ * @param {Object} props - Props del componente.
+ * @param {Object} props.kid - El objeto que representa al niño seleccionado.
+ * @returns {JSX.Element} Componente de UI que renderiza los datos del diario o mensajes de error/carga.
+ */
+export default function ParentsDiaryData({ kid }) {
+    // Desestructuración de datos, estado de carga y errores desde el hook personalizado.
+    const {
+        loading,
+        error,
+        dataKid,
+        formatDate
+    } = useParentsDiaryData({ kid });
 
     return (
         <Container>
+            {/* Indica que los datos están en proceso de carga */}
             {loading && <p>Cargando...</p>}
+            
+            {/* Muestra un mensaje de alerta si hay un error */}
             {error && <Alert variant="warning" className="m-1">{error}</Alert>}
 
             <Row>
-                {dataKid.map((entry) => (
+                {/* Renderiza las tarjetas si `dataKid` contiene datos, de lo contrario no muestra nada */}
+                {dataKid.length > 0 && dataKid.map((entry) => (
                     <Col md={6} key={entry.id_registro} className="mb-3">
                         <Card className="diarycard">
                             <Card.Header className="text-center">
                                 <FontAwesomeIcon icon={faListAlt} /> {formatDate(entry.fecha)}
                             </Card.Header>
                             <Card.Body>
+                                {/* Primer bloque: información de comidas */}
                                 <Row>
                                     <Col className="d-flex flex-column align-items-center text-center">
                                         <Card.Title><FontAwesomeIcon icon={faUtensils} /> Desayuno</Card.Title>
@@ -82,6 +53,8 @@ export default function ParentsDiaryData() {
                                         <Card.Text>{entry.merienda || 'No hay información'}</Card.Text>
                                     </Col>
                                 </Row>
+                                
+                                {/* Segundo bloque: información de siestas */}
                                 <Row>
                                     <Col className="d-flex flex-column align-items-center text-center">
                                         <Card.Title><FontAwesomeIcon icon={faBed} /> Siesta Mañana</Card.Title>
@@ -92,6 +65,8 @@ export default function ParentsDiaryData() {
                                         <Card.Text>{entry.siesta_tarde || 'No hay información'}</Card.Text>
                                     </Col>
                                 </Row>
+
+                                {/* Tercer bloque: información de deposiciones y micciones */}
                                 <Row>
                                     <Col className="d-flex flex-column align-items-center text-center">
                                         <Card.Title><FontAwesomeIcon icon={faPoo} /> Deposiciones</Card.Title>
@@ -102,6 +77,8 @@ export default function ParentsDiaryData() {
                                         <Card.Text>{entry.micciones || 'No hay información'}</Card.Text>
                                     </Col>
                                 </Row>
+
+                                {/* Cuarto bloque: artículos a traer y comentarios */}
                                 <Row>
                                     <Col className="d-flex flex-column align-items-center text-center">
                                         <Card.Title><FontAwesomeIcon icon={faListAlt} /> Qué traer</Card.Title>

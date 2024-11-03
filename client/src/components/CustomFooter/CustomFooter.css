@@ -1,0 +1,9 @@
+footer {
+    background-color: #035d6c;
+}
+.enlace{
+    color: white; /* Color cuando se pasa el ratón */
+}
+.enlace:hover {
+    color: #3dc0c0; /* Color cuando se pasa el ratón */
+}
