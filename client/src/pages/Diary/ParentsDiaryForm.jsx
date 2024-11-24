@@ -23,7 +23,8 @@ export default function ParentsDiaryForm({kid}) {
         medicacion,      // Estado para almacenar el valor de medicación
         comentarios,     // Estado para almacenar el valor de comentarios
         setMedicacion,   // Setter para actualizar el valor de medicación
-        setComentarios   // Setter para actualizar el valor de comentarios
+        setComentarios,   // Setter para actualizar el valor de comentarios
+        loading           //estado de carga
     } = useParentsDiaryForm({kid});
 
     return (
@@ -40,7 +41,7 @@ export default function ParentsDiaryForm({kid}) {
                 </Modal.Header>
                 
                 <Modal.Body>
-                    <Form className="kinder-form form-ParentsDiary">
+                    <Form className="kinder-form form-ParentsDiary" onSubmit={handleSave}>
                         {/* Campo de entrada para la medicación */}
                         <Form.Group controlId="diaryMedication">
                             <Form.Label>Medicación</Form.Label>
@@ -51,6 +52,7 @@ export default function ParentsDiaryForm({kid}) {
                                 onChange={(e) => setMedicacion(e.target.value)}
                                 maxLength={50}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
                         
@@ -64,17 +66,17 @@ export default function ParentsDiaryForm({kid}) {
                                 value={comentarios}
                                 onChange={(e) => setComentarios(e.target.value)}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
+                        <Modal.Footer>
+                            {/* Botón para guardar el objetivo, deshabilitado mientras se está guardando */}
+                            <Button type="submit" variant="primary" disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}  {/* Cambia el texto del botón según el estado de carga */}
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-
-                <Modal.Footer>
-                    {/* Botón para guardar los datos ingresados y cerrar el modal */}
-                    <Button variant="primary" onClick={handleSave}>
-                        Guardar Cambios
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     );

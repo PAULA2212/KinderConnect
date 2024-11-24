@@ -1,15 +1,9 @@
 const promisePool = require('../../services/database'); // Importa la conexión a la base de datos
 
 // Controlador para insertar un registro en el diario de progenitores
-const insertParentsDiary = async (req, res) => {
+const insertParentsDiarys = async (req, res) => {
     // Extrae los datos del cuerpo de la solicitud
     const { id_niño, fecha, medicacion, comentarios } = req.body;
-
-    // Verifica si se proporcionan todos los datos necesarios
-    if (!id_niño || !fecha || !comentarios) {
-        // Si faltan datos, responde con un estado 400 (Bad Request)
-        return res.status(400).json({ message: 'Faltan datos necesarios' }); // 400: Solicitud no válida
-    }
 
     try {
         // Inserta los datos en la base de datos
@@ -28,4 +22,4 @@ const insertParentsDiary = async (req, res) => {
     }
 };
 
-module.exports = insertParentsDiary; // Exporta el controlador para su uso en otras partes de la aplicación
+module.exports = insertParentsDiarys; // Exporta el controlador para su uso en otras partes de la aplicación

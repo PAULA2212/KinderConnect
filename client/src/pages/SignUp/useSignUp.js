@@ -84,15 +84,16 @@ export const useSignUp = () => {
      *
      * @param {Event} e - Evento de envío del formulario
      */
-    const handleSubmit = async(e) => {
-        e.preventDefault(); // Previene el comportamiento por defecto del formulario
-        if (validateForm()) { // Valida el formulario antes de continuar
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (validateForm()) {
             try {
-                await registerProfile(formData); // Llama al servicio para registrar el perfil
-                toast.success("Usuario registrado exitosamente"); // Mensaje de éxito
-                navigate('/'); // Redirige al usuario a la página principal
+                await registerProfile(formData);
+                toast.success("Usuario registrado exitosamente");
+                navigate('/');
             } catch (error) {
-                toast.error("No se ha podido registrar usuario"); // Manejo de errores en el registro
+                console.error("Error completo en el registro:", error);
+                toast.error(error.message);  // Muestra el mensaje de error detallado
             }
         }
     };

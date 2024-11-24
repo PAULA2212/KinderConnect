@@ -15,7 +15,7 @@ const linkedKidParents = require('../controllers/linkeds/linkedKidParentsControl
 const linkedKidTeachers = require('../controllers/linkeds/linkedKidTeachersController'); // Controlador para vincular niños y educadores
 const addKidProfile = require('../controllers/profiles/addKidProfileController'); // Controlador para añadir perfil de niño
 const updateKidProfile = require('../controllers/profiles/updateKidProfileController'); // Controlador para actualizar perfil de niño
-const insertParentsDiary = require('../controllers/diary/insertParentsDiaryController'); // Controlador para insertar diario de padres
+const insertParentsDiarys = require('../controllers/diary/insertParentsDiaryController'); // Controlador para insertar diario de padres
 const insertTeachersDiary = require('../controllers/diary/insertTeachersDiaryController'); // Controlador para insertar diario de educadores
 const getDiaryForteachers = require('../controllers/diary/getDiaryForTeachersController'); // Controlador para obtener diario de educadores
 const getDiaryForParents = require('../controllers/diary/getDiaryForParentsController'); // Controlador para obtener diario de padres
@@ -72,7 +72,7 @@ router.post('/linkednino_progenitor', linkedKidParents); // Ruta para vincular u
 router.post('/linkednino_educador', linkedKidTeachers); // Ruta para vincular un niño a un educador
 router.post('/addProfileKid', addKidProfile); // Ruta para añadir un perfil de niño
 router.put('/updateProfileKid/:id', updateKidProfile); // Ruta para actualizar un perfil de niño
-router.post('/diario_progenitores/insertar', insertParentsDiary); // Ruta para insertar en el diario de progenitores
+router.post('/diario_progenitores/insertar', insertParentsDiarys); // Ruta para insertar en el diario de progenitores
 router.post('/diario_educadores/insertar', insertTeachersDiary); // Ruta para insertar en el diario de educadores
 router.get('/diario_para_educadores/:idKid', getDiaryForteachers); // Ruta para obtener diario para educadores
 router.get('/diario_para_progenitores/:idKid', getDiaryForParents); // Ruta para obtener diario para progenitores

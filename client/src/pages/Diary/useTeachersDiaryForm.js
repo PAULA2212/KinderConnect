@@ -37,7 +37,7 @@ export const useTeachersDiaryForm = ({ kid }) => {
     const handleClose = () => {
         setShowModal(false);
     };
-
+    const [loading, setLoading] = useState(false);
     /**
      * Maneja los cambios en los campos del formulario, actualizando `formData`
      * para reflejar los valores actuales de los campos en tiempo real.
@@ -56,7 +56,8 @@ export const useTeachersDiaryForm = ({ kid }) => {
      * Maneja la lógica de guardado del formulario al enviarlo, validando los
      * datos y mostrando mensajes de notificación según el resultado de la operación.
      */
-    const handleSave = async () => {
+    const handleSave = async (e) => {
+        e.preventDefault()
         // Verifica si se ha seleccionado un niño antes de guardar
         if (!kid || !kid.id_niño) {
             console.error("No se ha seleccionado un niño.");
@@ -81,6 +82,7 @@ export const useTeachersDiaryForm = ({ kid }) => {
         console.log('Datos a enviar:', data); // Para fines de depuración
 
         try {
+            setLoading(true)
             // Envía los datos al servicio para guardarlos
             await saveDiaryEntry(data);
             toast.success(`Tu registro del día ${data.fecha} se ha guardado correctamente.`); // Muestra éxito
@@ -89,6 +91,8 @@ export const useTeachersDiaryForm = ({ kid }) => {
             // Muestra error en caso de fallo en el guardado y lo registra en la consola
             toast.error('Error al guardar los datos.');
             console.error('Error al guardar los datos:', error);
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -100,6 +104,7 @@ export const useTeachersDiaryForm = ({ kid }) => {
         handleSave,   // Función para guardar el registro diario
         showModal,    // Estado que controla la visibilidad del modal
         formData,     // Estado con los datos del formulario
-        setFormData   // Función para actualizar los datos del formulario
+        setFormData,   // Función para actualizar los datos del formulario
+        loading
     }
 }

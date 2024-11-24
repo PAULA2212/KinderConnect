@@ -29,7 +29,7 @@ const userDetails = async (req, res) => {
         console.log('Resultado de la búsqueda del usuario para detalles:', rows);
         
         if (rows.length > 0) {
-            res.json(rows[0]); // Devolver el primer resultado
+            res.status(200).json(rows[0]); // Devolver el primer resultado
         } else {
             console.log('Error: Usuario no encontrado');
             res.status(404).json({ message: 'Usuario no encontrado' });

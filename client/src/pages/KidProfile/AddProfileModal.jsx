@@ -50,7 +50,7 @@ export default function AddProfileModal({ fetchNiños, user }) {
 
                 {/* Cuerpo del modal con el formulario de datos */}
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleAddNiño} >
                         {/* Campo de entrada para el nombre del niño */}
                         <Form.Group>
                             <Form.Label>Nombre</Form.Label>
@@ -60,6 +60,7 @@ export default function AddProfileModal({ fetchNiños, user }) {
                                 value={formData.nombre}        // Enlaza con el valor de formData para el nombre
                                 onChange={handleChange}        // Actualiza formData en cada cambio
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
 
@@ -72,6 +73,7 @@ export default function AddProfileModal({ fetchNiños, user }) {
                                 value={formData.apellido_1}     // Enlaza con el valor de formData para el primer apellido
                                 onChange={handleChange}         // Actualiza formData en cada cambio
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
 
@@ -96,6 +98,7 @@ export default function AddProfileModal({ fetchNiños, user }) {
                                 value={formData.fecha_nacimiento} // Enlaza con el valor de formData para la fecha de nacimiento
                                 onChange={handleChange}           // Actualiza formData en cada cambio
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
 
@@ -108,6 +111,7 @@ export default function AddProfileModal({ fetchNiños, user }) {
                                 value={formData.centro_educativo}
                                 onChange={handleChange}
                                 className="form-input"
+                                required
                             >
                                 <option value="">Seleccionar centro</option>
                                 {loadingCentros ? (
@@ -121,19 +125,19 @@ export default function AddProfileModal({ fetchNiños, user }) {
                                 )}
                             </Form.Control>
                         </Form.Group>
-
+                        {/* Pie del modal con el botón para añadir el niño */}
+                        <Modal.Footer>
+                            <Button
+                                type="submit"         // Llama a handleAddNiño para procesar el formulario
+                                className='kinder-button'
+                            >
+                                Añadir
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
 
-                {/* Pie del modal con el botón para añadir el niño */}
-                <Modal.Footer>
-                    <Button
-                        onClick={handleAddNiño}          // Llama a handleAddNiño para procesar el formulario
-                        className='kinder-button'
-                    >
-                        Añadir
-                    </Button>
-                </Modal.Footer>
+
             </Modal>
         </>
     );

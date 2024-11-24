@@ -56,7 +56,7 @@ export default function useKidSelect() {
         setSelectedKid(e.target.value);
     };
 
-    // Guarda el ID del niño seleccionado en el sessionStorage y recarga el contexto
+    // Guarda el Code del niño seleccionado en el sessionStorage y recarga el contexto
     const handleSaveKid = () => {
         if (selectedKid && user && profileType) {
             const idUser = profileType === 'progenitor' ? user.id_progenitor : user.id_educador;

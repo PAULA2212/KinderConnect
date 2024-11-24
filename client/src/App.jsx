@@ -45,7 +45,6 @@ function App() {
                     <Route path="/" element={<Login />} /> {/* Ruta para la página de inicio de sesión */}
                     <Route path="signUp" element={<SignUp />} /> {/* Ruta para la página de registro */}
                     <Route path='politica-privacidad' element={<PrivacyPolicy />} /> {/* Ruta para la política de privacidad */}
-                    
                     {/* Ruta privada que requiere autenticación */}
                     <Route
                         path="layout"
@@ -53,8 +52,7 @@ function App() {
                             <PrivateRoute>
                                 <Layout /> {/* Componente principal que envuelve las rutas privadas */}
                             </PrivateRoute>
-                        }
-                    >
+                        }>
                         {/* Rutas protegidas dentro de la sección privada */}
                         <Route index element={<Welcome/>} /> {/* Página de bienvenida dentro de layout */}
                         <Route path="perfil" element={<Profile/>} /> {/* Página de perfil del usuario */}

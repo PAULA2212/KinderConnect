@@ -26,7 +26,7 @@ const uploadFile = async (req, res) => {
             await promisePool.query("INSERT INTO documentos (nombre, url, fecha_subida, id_educador) VALUES (?, ?, ?, ?)", [nombre, file_url, fecha_subida, id_educador]);
 
             // Si la inserción es exitosa, envía una respuesta positiva
-            res.status(200).json({
+            res.status(201).json({
                 success: true,
                 message: 'Archivo subido y registrado correctamente.',
                 file_url: file_url // Devuelve la URL del archivo subido

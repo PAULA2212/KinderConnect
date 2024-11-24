@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addDiaryEntry } from "../../services/DiaryService";
+import { addDiaryEntry, saveDiaryEntry } from "../../services/DiaryService";
 import { toast } from 'react-toastify';
 
 /**
@@ -19,24 +19,7 @@ export const useParentsDiaryForm = ({kid}) => {
 
     // Estado para almacenar el valor del campo de comentarios
     const [comentarios, setComentarios] = useState('');
-
-    /**
-     * Función `saveDiaryEntry`
-     * Esta función asíncrona hace una llamada al servicio `addDiaryEntry` para guardar la entrada
-     * del diario en el backend.
-     *
-     * @param {Object} data - Datos del diario que incluyen id_niño, fecha, medicación y comentarios.
-     * @returns {Promise} - Devuelve la respuesta de la API con los datos guardados si tiene éxito.
-     */
-    const saveDiaryEntry = async (data) => {
-        try {
-            const response = await addDiaryEntry(data);
-            return response.data;
-        } catch (error) {
-            console.error('Error al guardar los datos:', error);
-            throw error;
-        }
-    };
+    const [loading, setLoading] = useState(false);
 
     /**
      * Función `handleShow`
@@ -57,7 +40,8 @@ export const useParentsDiaryForm = ({kid}) => {
      * Guarda la entrada del diario en la base de datos si hay un niño seleccionado.
      * En caso de éxito, muestra una notificación y cierra el modal.
      */
-    const handleSave = async () => {
+    const handleSave = async (e) => {
+        e.preventDefault();
         // Validación: Comprueba que haya un niño seleccionado antes de proceder
         if (!kid || !kid.id_niño) {
             console.error("No se ha seleccionado un niño.");
@@ -73,8 +57,9 @@ export const useParentsDiaryForm = ({kid}) => {
         };
 
         try {
+            setLoading(true)
             // Llama a `saveDiaryEntry` para guardar los datos en el backend
-            await saveDiaryEntry(data);
+            await addDiaryEntry(data);
             
             // Obtiene la fecha en formato legible para el mensaje de éxito
             const formattedDate = new Date().toLocaleDateString();
@@ -85,6 +70,8 @@ export const useParentsDiaryForm = ({kid}) => {
         } catch (error) {
             // Muestra un mensaje de error si el guardado falla
             toast.error('Error al guardar el registro. Por favor, intente nuevamente.', { autoClose: 3000 });
+        } finally{
+            setLoading(false)
         }
     };
 
@@ -97,6 +84,7 @@ export const useParentsDiaryForm = ({kid}) => {
         medicacion,
         comentarios,
         setMedicacion,
-        setComentarios
+        setComentarios,
+        loading
     };
 };

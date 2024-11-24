@@ -24,28 +24,9 @@ export default function AdminDocuments() {
         handleAddorDelDocsForParent    // Función para gestionar la adición/eliminación de documentos para progenitores
     } = useAdminDocuments();
 
-    // Si el usuario es un progenitor y no tiene un niño seleccionado, mostramos un mensaje
-    // que indica que debe seleccionar un niño para ver los documentos.
-    if (!kidDocs && !teacherDocs && loading) {
-        return (
-            <>
-                <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
-                <div>
-                    <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
-                </div>
-            </>
-        );
-    }
-
-    // Mientras los documentos están cargando (estado de carga), mostramos un mensaje de "Cargando documentos..."
-    if (loading) {
-        return <p>Cargando documentos...</p>;
-    } 
-
     return (
         <>
-            {/* Título de la página con un icono de archivo */}
-            <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
+            
 
             {/* Modal para subir documentos. La función para manejar la adición de documentos varía
                 según si el perfil es de un educador o de un progenitor */}

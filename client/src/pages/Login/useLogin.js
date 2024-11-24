@@ -22,22 +22,27 @@ export default function useLogin() {
         });
     };
 
-    // Realiza la solicitud de inicio de sesión a la API
     const onLoginSubmit = async (e) => {
         e.preventDefault();
-
+    
+        // Validación previa: verificar si faltan usuario o contraseña
+        if (!dataUser.userName || !dataUser.password) {
+            setError('Por favor, complete ambos campos: usuario y contraseña.');
+            return; // Detener la ejecución si faltan datos
+        } 
+    
         try {
             const response = await axiosInstance.post('/login', dataUser);
-            
+    
             // Imprimir la respuesta completa para revisar su estructura
             console.log("Respuesta de la API:", response);
-
+    
             // Verificar si `response.data` y `response.data.token` existen
             if (response.data && response.data.token) {
                 // Almacenar el token y los datos del usuario en sessionStorage
                 sessionStorage.setItem('authToken', response.data.token);
                 sessionStorage.setItem('user', JSON.stringify(response.data));
-
+    
                 // Recargar el contexto del usuario y navegar a la página principal
                 reloadUser();
                 navigate('/layout');
@@ -47,7 +52,7 @@ export default function useLogin() {
             }
         } catch (error) {
             console.error('Error en el inicio de sesión:', error);
-
+    
             // Actualiza el mensaje de error según el código de respuesta de la API
             if (error.response?.status === 401) {
                 setError('Credenciales incorrectas');
@@ -56,6 +61,7 @@ export default function useLogin() {
             }
         }
     };
+    
 
     return {
         dataUser,

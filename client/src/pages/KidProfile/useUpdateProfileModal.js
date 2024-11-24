@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 export default function useUpdateProfileModal(kid, fetchNiños) {
     const [showForm, setShowForm] = useState(false); // Estado que controla la visibilidad del modal
     const [centros, setCentros] = useState([]); // Estado que almacena los centros educativos
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ // Estado que almacena los datos del formulario
         nombre: kid.nombre,
         apellido_1: kid.apellido_1,
@@ -74,8 +75,10 @@ export default function useUpdateProfileModal(kid, fetchNiños) {
      * @returns {Promise<void>}
      * @throws {Error} Si ocurre un error al actualizar el perfil del niño.
      */
-    const handleUpdateNiño = async () => {
+    const handleUpdateNiño = async (e) => {
+        e.preventDefault()
         try {
+            setLoading(true);
             const data = {
                 nombre: formData.nombre,
                 apellido_1: formData.apellido_1,
@@ -85,7 +88,6 @@ export default function useUpdateProfileModal(kid, fetchNiños) {
             };
             await updateKidProfile(kid.id_niño, data); // Llama al servicio para actualizar el perfil
             toast.success('Perfil del niño actualizado correctamente', { autoClose: 3000 });
-
             fetchNiños(); // Refresca la lista de niños
             setFormData({ // Resetea el formulario
                 nombre: '',
@@ -98,8 +100,10 @@ export default function useUpdateProfileModal(kid, fetchNiños) {
         } catch (error) {
             console.error('Error al actualizar el niño:', error);
             toast.error('No se ha podido actualizar el perfil del niño', { autoClose: 3000 });
+        }finally{
+            setLoading(false)
         }
     };
 
-    return [showForm, handleShow, handleChange, formData, centros, handleUpdateNiño, setShowForm]; // Retorna los estados y funciones necesarias
+    return [showForm, handleShow, handleChange, formData, centros, handleUpdateNiño, setShowForm, loading]; // Retorna los estados y funciones necesarias
 }

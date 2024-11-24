@@ -23,7 +23,7 @@ const deleteDocument = async (req, res) => {
         // Ejecuta la consulta SQL, pasando el id como parámetro
         await promisePool.query(query, [id]);
         // Si la consulta se ejecuta correctamente, devuelve un mensaje de éxito
-        res.status(200).json({ message: 'Documento borrado exitosamente' });
+        res.status(204).json({ message: 'Documento borrado exitosamente' });
     } catch (error) {
         // Manejo de errores: si ocurre un error al ejecutar la consulta, se registra el error en la consola
         console.log('Error al borrar el documento', error);

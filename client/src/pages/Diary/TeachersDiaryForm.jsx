@@ -22,7 +22,8 @@ export default function TeachersDiaryForm({ kid }) {
         handleClose,    // Función para cerrar el modal
         showModal,      // Estado para controlar la visibilidad del modal
         handleShow,     // Función para mostrar el modal
-        formData        // Estado que almacena los valores de los campos del formulario
+        formData,        // Estado que almacena los valores de los campos del formulario
+        loading
     } = useTeachersDiaryForm({ kid });
 
     return (
@@ -39,7 +40,7 @@ export default function TeachersDiaryForm({ kid }) {
                 </Modal.Header>
                 <Modal.Body>
                     {/* Formulario estructurado en varias secciones */}
-                    <Form className="kinder-form form-TeachersDiary">
+                    <Form className="kinder-form form-TeachersDiary" onSubmit={handleSave}>
                         <section>
                             {/* Grupo de control para el campo de Desayuno */}
                             <Form.Group className="form-group" controlId="diaryDesayuno">
@@ -50,6 +51,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.desayuno}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="bien">Bien</option>
@@ -67,6 +69,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.comida}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="bien">Bien</option>
@@ -84,6 +87,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.merienda}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="bien">Bien</option>
@@ -103,6 +107,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.siesta_mañana}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="bien">Bien</option>
@@ -118,6 +123,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.siesta_tarde}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 >
                                     <option value="">Seleccionar</option>
                                     <option value="bien">Bien</option>
@@ -137,6 +143,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.micciones}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 />
                             </Form.Group>
                             <Form.Group className="form-group" controlId="diaryDeposiciones">
@@ -147,6 +154,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.deposiciones}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 />
                             </Form.Group>
                         </section>
@@ -161,6 +169,7 @@ export default function TeachersDiaryForm({ kid }) {
                                     value={formData.traer}
                                     onChange={handleChange}
                                     className="form-input t"
+                                    required
                                 />
                             </Form.Group>
                             <Form.Group className="form-group" controlId="diaryComentarios">
@@ -175,14 +184,15 @@ export default function TeachersDiaryForm({ kid }) {
                                 />
                             </Form.Group>
                         </section>
+                        <Modal.Footer>
+                            {/* Botón para guardar el objetivo, deshabilitado mientras se está guardando */}
+                            <Button type="submit" variant="primary" disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}  {/* Cambia el texto del botón según el estado de carga */}
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    {/* Botón para guardar los datos ingresados */}
-                    <Button variant="primary" onClick={handleSave}>
-                        Guardar
-                    </Button>
-                </Modal.Footer>
+            
             </Modal>
         </>
     );

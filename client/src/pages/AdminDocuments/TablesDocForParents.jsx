@@ -4,7 +4,7 @@
 // También usamos un hook personalizado `useTablesDocForParents` para gestionar la lógica relacionada con las acciones sobre los documentos.
 import { Tabs, Tab, Table, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faFile, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useTablesDocForParents from "./useTablesDocForParents"; // Hook personalizado para manejar acciones
 
 // Componente que muestra los documentos relacionados con los educadores y los del niño en un formato tabulado.
@@ -14,9 +14,22 @@ export default function TablesDocForParents({ kid, kidDocs, teachersDocs, onAddo
     // Usamos el hook `useTablesDocForParents` para obtener las funciones `handleDownload` (descarga de documentos)
     // y `handleDelete` (borrar documentos). Estas funciones se ejecutarán cuando los usuarios interactúen con la tabla.
     const { handleDownload, handleDelete } = useTablesDocForParents(onAddorDelDocs); // Hook personalizado
-
+    // Si el usuario es un progenitor y no tiene un niño seleccionado, mostramos un mensaje
+    // que indica que debe seleccionar un niño para ver los documentos.
+    if (kid === null ) {
+        return (
+            <>
+                <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
+                <div>
+                    <p>Debes seleccionar un niño para poder acceder a sus datos.</p>
+                </div>
+            </>
+        );
+    }
     return (
         <>
+            {/* Título de la página con un icono de archivo */}
+            <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
             {/* Uso de tabs para separar los documentos de educadores y del niño */}
             <Tabs defaultActiveKey="1" className='m-3'>
                 

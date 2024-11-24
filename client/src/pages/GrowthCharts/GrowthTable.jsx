@@ -2,6 +2,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Icono de la pape
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Componente para renderizar íconos de Font Awesome
 import { Table } from "react-bootstrap"; // Componente de tabla de Bootstrap
 import { deleteData } from "../../services/GrowthChartsService"; // Servicio para manejar las solicitudes de eliminación de datos
+import { toast } from 'react-toastify';
 
 /**
  * Componente GrowthTable
@@ -36,9 +37,11 @@ export default function GrowthTable({ values, setValues, type, kid, profileType 
             await deleteData(apiURL);
             // Filtra el registro eliminado del estado local
             setValues(prevValues => prevValues.filter(item => item.id_registro !== id));
+            toast.success("La medida ha sido eliminada correctamente")
         } catch (error) {
             console.error('Error al eliminar el dato:', error);
-            // Aquí puedes añadir un mensaje de error o notificación
+            //mensaje de error
+            toast.error("No se pudo eliminar la medida en este momento")
         }
     };
 

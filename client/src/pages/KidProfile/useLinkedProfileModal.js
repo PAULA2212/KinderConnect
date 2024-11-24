@@ -14,16 +14,18 @@ import { toast } from 'react-toastify';
  * @returns {Array} Un arreglo que contiene el estado del modal, la función para mostrar el modal y la función para vincular niños.
  */
 export default function useLinkedProfileModal(fetchNiños, user, profileType) {
-    const [linkingForm, setLinkingForm] = useState(false); // Estado que controla la visibilidad del modal
+    const [showModal, setShowModal] = useState(false); // Estado que controla la visibilidad del modal
     const [uniqueCode, setUniqueCode] = useState(""); // Estado que almacena el código único ingresado
+    const [loading, setLoading] = useState(false);
 
     /**
      * Muestra el modal de vinculación.
      * 
      * @returns {void}
      */
-    const handleLinkClick = () => {
-        setLinkingForm(true); // Cambia el estado para mostrar el modal
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => {
+        setShowModal(false);
     };
 
     /**
@@ -34,8 +36,10 @@ export default function useLinkedProfileModal(fetchNiños, user, profileType) {
      * @returns {Promise<void>}
      * @throws {Error} Si ocurre un error durante la vinculación.
      */
-    const handleAddKids = async () => {
+    const handleAddKids = async (e) => {
+        e.preventDefault()
         try {
+            setLoading(true)
             // Construye los datos de solicitud basados en el tipo de usuario (progenitor o educador)
             const data = {
                 id: profileType === "progenitor" ? user.id_progenitor : user.id_educador,
@@ -48,12 +52,14 @@ export default function useLinkedProfileModal(fetchNiños, user, profileType) {
 
             // Actualiza la lista de niños y resetea el formulario después de la vinculación
             fetchNiños();
-            setLinkingForm(false); // Oculta el modal
+            setShowModal(false); // Oculta el modal
         } catch (error) {
             console.error('Error al añadir un niño al progenitor:', error);
             toast.error('No se ha podido vincular el perfil del niño', { autoClose: 3000 });
+        }finally{
+            setLoading(false)
         }
     };
 
-    return [linkingForm, handleLinkClick, handleAddKids, uniqueCode, setUniqueCode]; // Retorna el estado y funciones necesarias
+    return [showModal, handleClose, handleShow, handleAddKids, uniqueCode, setUniqueCode, loading]; // Retorna el estado y funciones necesarias
 }

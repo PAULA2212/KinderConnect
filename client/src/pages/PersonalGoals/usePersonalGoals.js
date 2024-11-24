@@ -31,6 +31,7 @@ export const usePersonalGoals = () => {
     const fetchGoals = async () => {
         setLoading(true);
         try {
+            setGoals([]);
             const response = await getGoals(kid.id_niño);
             setGoals(response.data);
         } catch (error) {

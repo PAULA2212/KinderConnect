@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, ToastContainer } from 'react-bootstrap';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useUpdateProfileModal from './useUpdateProfileModal';
@@ -13,21 +13,20 @@ import useUpdateProfileModal from './useUpdateProfileModal';
  */
 export default function UpdateProfileModal({ kid, fetchNiños }) {
     // Usar el custom hook para gestionar la lógica del modal
-    const [showForm, handleShow, handleChange, formData, centros, handleUpdateNiño, setShowForm] = useUpdateProfileModal(kid, fetchNiños);
+    const [showForm, handleShow, handleChange, formData, centros, handleUpdateNiño, setShowForm, loading] = useUpdateProfileModal(kid, fetchNiños);
 
     return (
         <>
             <button onClick={handleShow} className="edit-icon">
                 <FontAwesomeIcon icon={faPencil} />
             </button>
-
             {/* Modal para actualizar el perfil del niño */}
             <Modal show={showForm} onHide={() => setShowForm(false)} centered className='kinder-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Actualizar Niño</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleUpdateNiño}>
                         <Form.Group>
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control
@@ -36,6 +35,7 @@ export default function UpdateProfileModal({ kid, fetchNiños }) {
                                 value={formData.nombre}
                                 onChange={handleChange}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -46,6 +46,7 @@ export default function UpdateProfileModal({ kid, fetchNiños }) {
                                 value={formData.apellido_1}
                                 onChange={handleChange}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -66,6 +67,7 @@ export default function UpdateProfileModal({ kid, fetchNiños }) {
                                 value={formData.fecha_nacimiento}
                                 onChange={handleChange}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -76,6 +78,7 @@ export default function UpdateProfileModal({ kid, fetchNiños }) {
                                 value={formData.centro_educativo}
                                 onChange={handleChange}
                                 className="form-input"
+                                required
                             >
                                 <option value="">Seleccionar centro</option>
                                 {centros.map((centro) => (
@@ -85,13 +88,14 @@ export default function UpdateProfileModal({ kid, fetchNiños }) {
                                 ))}
                             </Form.Control>
                         </Form.Group>
+                        <Modal.Footer>
+                            {/* Botón para guardar el objetivo, deshabilitado mientras se está guardando */}
+                            <Button type="submit" variant="primary" disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}  {/* Cambia el texto del botón según el estado de carga */}
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleUpdateNiño} className='kinder-button'>
-                        Actualizar
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     );

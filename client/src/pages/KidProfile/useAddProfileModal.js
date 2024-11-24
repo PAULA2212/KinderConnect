@@ -61,7 +61,8 @@ export function useAddProfileModal(fetchNiños, user) {
      * Envía los datos del formulario para añadir un nuevo perfil de niño.
      * Muestra un mensaje de éxito o error según el resultado y refresca la lista de niños.
      */
-    const handleAddNiño = async () => {
+    const handleAddNiño = async (e) => {
+        e.preventDefault()
         try {
             const data = {
                 id_progenitor: user.id_progenitor,

@@ -22,6 +22,7 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
         handleInputChange,
         handleKidSelectionChange,
         handleSubmitEvent,
+        loading
     } = useModalCalendar(fetchEvents, user, profileType); // Desestructurar el hook
 
     return (
@@ -34,7 +35,7 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                     <Modal.Title>Añadir Nuevo Evento</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleSubmitEvent}>
                         <Form.Group>
                             <Form.Label>Título</Form.Label>
                             <Form.Control
@@ -43,6 +44,7 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                                 value={newEvent.title}
                                 onChange={handleInputChange}
                                 placeholder="Ingrese el título del evento"
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -54,6 +56,7 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                                 value={newEvent.description}
                                 onChange={handleInputChange}
                                 placeholder="Ingrese la descripción del evento"
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -63,6 +66,7 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                                 name="date"
                                 value={newEvent.date}
                                 onChange={handleInputChange}
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
@@ -72,11 +76,12 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                                 name="time"
                                 value={newEvent.time}
                                 onChange={handleInputChange}
+                                required
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Invitar a Niños</Form.Label>
-                            <Form.Control as="select" multiple onChange={handleKidSelectionChange}>
+                            <Form.Control as="select" multiple onChange={handleKidSelectionChange} >
                                 {kids.map((kid) => (
                                     <option key={kid.id_niño} value={kid.id_niño}>
                                         {kid.nombre} {kid.apellido_1} {kid.apellido_2}
@@ -84,13 +89,17 @@ export default function ModalCalendar({ fetchEvents, user, profileType }) {
                                 ))}
                             </Form.Control>
                         </Form.Group>
+                        <Modal.Footer>
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={handleSubmitEvent}>
-                        Guardar Evento
-                    </Button>
-                </Modal.Footer>
+
             </Modal>
         </>
     );

@@ -13,7 +13,9 @@ export default function BookClub() {
         <FontAwesomeIcon icon={faGlasses} /> Club de lectura
       </h1>
       <BookModalForm onBookAdded={handleBookAdded} /> {/* Pasa la función de manejo de libro añadido */}
-      <BookList books={books} loading={loading} /> {/* Pasa los libros y el estado de carga */}
+      {books.length === 0 ?
+        <p>Aun no hay libros en el club de lectura</p> :
+        <BookList books={books} loading={loading} /> } {/* Pasa los libros y el estado de carga */}
     </>
   );
 }

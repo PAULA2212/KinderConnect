@@ -20,6 +20,7 @@ const useModalCalendar = (fetchEvents, user, profileType) => {
     const [showModal, setShowModal] = useState(false);
     const [kids, setKids] = useState([]);
     const [newEvent, setNewEvent] = useState({ title: '', description: '', date: '', time: '' });
+    const [loading, setLoading] = useState(false);
 
     /**
      * Función para abrir el modal.
@@ -60,7 +61,8 @@ const useModalCalendar = (fetchEvents, user, profileType) => {
     /**
      * Función para enviar el nuevo evento a la API.
      */
-    const handleSubmitEvent = async () => {
+    const handleSubmitEvent = async (e) => {
+        e.preventDefault()
         try {
             // Crear un objeto de fecha con la fecha y hora seleccionadas
             const [hours, minutes] = newEvent.time.split(':');
@@ -77,7 +79,7 @@ const useModalCalendar = (fetchEvents, user, profileType) => {
             if (!id_evento) {
                 throw new Error('ID del evento no recibido');
             }
-
+            setLoading(true)
             await Promise.all(
                 selectedKids.map((id_niño) => {
                     console.log(`Vinculando niño ${id_niño} al evento ${id_evento}`); // Agregar log para depuración
@@ -93,6 +95,8 @@ const useModalCalendar = (fetchEvents, user, profileType) => {
         } catch (error) {
             toast.error(`Error al añadir el evento: ${error.message}`); // Notificar al usuario del error
             console.error('Error al añadir el evento:', error);
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -125,6 +129,7 @@ const useModalCalendar = (fetchEvents, user, profileType) => {
         handleInputChange,
         handleKidSelectionChange,
         handleSubmitEvent,
+        loading
     };
 };
 

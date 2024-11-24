@@ -4,7 +4,7 @@
 // junto con FontAwesome para los iconos de descarga y eliminación de archivos.
 import { Tabs, Tab, Table, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faFile, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useTablesDocForTeachers from "./useTablesDocForTeachers"; // Importamos el hook personalizado para gestionar la lógica de documentos
 
 // Componente que muestra los documentos de los niños y del educador en formato tabulado.
@@ -17,6 +17,8 @@ export default function TablesDocForTeachers({ kidDocs, teacherDocs, onAddorDelD
 
     return (
         <>
+            {/* Título de la página con un icono de archivo */}
+            <h1 className="kinder-title"><FontAwesomeIcon icon={faFile} />  Documentos administrativos</h1>
             {/* Uso de tabs para separar los documentos de los niños y los documentos del educador */}
             <Tabs defaultActiveKey="1" className='m-3'>
                 

@@ -14,7 +14,7 @@ import useLinkedProfileModal from './useLinkedProfileModal';
  */
 export default function LinkedProfileModal({ user, fetchNiños, profileType }) {
     // Usar el custom hook para gestionar la lógica del modal
-    const [linkingForm, handleLinkClick, handleAddKids, uniqueCode, setUniqueCode] = useLinkedProfileModal(fetchNiños, user, profileType);
+    const [showModal, handleClose, handleShow, handleAddKids, uniqueCode, setUniqueCode, loading] = useLinkedProfileModal(fetchNiños, user, profileType);
 
     return (
         <>
@@ -22,23 +22,23 @@ export default function LinkedProfileModal({ user, fetchNiños, profileType }) {
             {profileType === "progenitor" ? (
                 <div className='button-p'>
                     <p>¿Tu hij@ ya tiene un perfil creado por otro progenitor?</p>
-                    <Button onClick={handleLinkClick} className='kinder-button'>
+                    <Button onClick={handleShow} className='kinder-button'>
                         <FontAwesomeIcon icon={faPlus} /> Vincular con perfil
                     </Button>
                 </div>
             ) : (
-                <Button onClick={handleLinkClick} className='kinder-button'>
+                <Button onClick={handleShow} className='kinder-button'>
                     <FontAwesomeIcon icon={faPlus} /> Añadir nuevo niño
                 </Button>
             )}
 
             {/* Modal para que el usuario ingrese el código único del niño */}
-            <Modal show={linkingForm} onHide={() => setUniqueCode('')} centered className='kinder-modal'>
+            <Modal show={showModal} onHide={handleClose} centered className='kinder-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Vincular Niño</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleAddKids}>
                         <Form.Group>
                             <Form.Label><strong>Código del niño:</strong></Form.Label>
                             <Form.Control
@@ -47,15 +47,17 @@ export default function LinkedProfileModal({ user, fetchNiños, profileType }) {
                                 value={uniqueCode}
                                 onChange={(e) => setUniqueCode(e.target.value)}
                                 className="form-input"
+                                required
                             />
                         </Form.Group>
+                        <Modal.Footer>
+                            {/* Botón para guardar el objetivo, deshabilitado mientras se está guardando */}
+                            <Button type="submit" variant="primary" disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}  {/* Cambia el texto del botón según el estado de carga */}
+                            </Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleAddKids} className='kinder-button'>
-                        <FontAwesomeIcon icon={faPlus} /> Vincular
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     );

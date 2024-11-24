@@ -20,14 +20,24 @@ const register = async (req, res) => {
         return res.status(400).json({ message: 'Nombre de usuario, contraseña y perfil son obligatorios' }); // Respuesta de error al cliente
     }
 
+    // Verificar si el nombre de usuario ya existe en la base de datos
+    const sqlCheckUser = 'SELECT * FROM usuarios WHERE username = ?';
+    const [existingUser] = await promisePool.query(sqlCheckUser, [userName]);
+
+    if (existingUser.length > 0) {
+        console.log('Error: El nombre de usuario ya existe'); // Log si el usuario ya existe
+        return res.status(409).json({message: "El nombre de usuario ya existe"});
+    }
+
     try {
+        
         // Hash de la contraseña utilizando bcrypt con un factor de costo de 10
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log('Contraseña hasheada:', hashedPassword); // Log de la contraseña hasheada para verificación
 
         // Consulta SQL para insertar un nuevo usuario en la base de datos
-        const sql = 'INSERT INTO usuarios (username, contraseña, perfil) VALUES (?, ?, ?)';
-        const [result] = await promisePool.query(sql, [userName, hashedPassword, perfil]); // Ejecución de la consulta
+        const sqlInsertUser = 'INSERT INTO usuarios (username, contraseña, perfil) VALUES (?, ?, ?)';
+        const [result] = await promisePool.query(sqlInsertUser, [userName, hashedPassword, perfil]); // Ejecución de la consulta
 
         console.log('Usuario registrado con éxito:', result); // Log del resultado de la inserción
         res.status(201).json({ message: 'Usuario registrado exitosamente' }); // Respuesta exitosa al cliente

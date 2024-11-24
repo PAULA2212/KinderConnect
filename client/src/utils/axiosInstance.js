@@ -8,3 +8,5 @@ const axiosInstance = axios.create({
 
 // Exportar la instancia de Axios para ser utilizada en otros módulos
 export default axiosInstance;
+
+
